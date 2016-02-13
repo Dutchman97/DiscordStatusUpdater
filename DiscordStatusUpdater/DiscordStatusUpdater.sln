@@ -5,14 +5,7 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordStatusUpdater", "DiscordStatusUpdater\DiscordStatusUpdater.csproj", "{71A63625-F1AB-4FB5-9BE8-85318E92A87C}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Discord.Net", "Discord.Net\Discord.Net.xproj", "{ACFB060B-EC8A-4926-B293-04C01E17EE23}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Discord.Net.Shared", "Discord.Net.Shared\Discord.Net.Shared.shproj", "{2875DEB5-F248-4105-8EA2-5141E3DE8025}"
-EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Discord.Net.Shared\Discord.Net.Shared.projitems*{2875deb5-f248-4105-8ea2-5141e3de8025}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -25,12 +18,6 @@ Global
 		{71A63625-F1AB-4FB5-9BE8-85318E92A87C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{71A63625-F1AB-4FB5-9BE8-85318E92A87C}.TestResponses|Any CPU.ActiveCfg = Release|Any CPU
 		{71A63625-F1AB-4FB5-9BE8-85318E92A87C}.TestResponses|Any CPU.Build.0 = Release|Any CPU
-		{ACFB060B-EC8A-4926-B293-04C01E17EE23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ACFB060B-EC8A-4926-B293-04C01E17EE23}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ACFB060B-EC8A-4926-B293-04C01E17EE23}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ACFB060B-EC8A-4926-B293-04C01E17EE23}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ACFB060B-EC8A-4926-B293-04C01E17EE23}.TestResponses|Any CPU.ActiveCfg = TestResponses|Any CPU
-		{ACFB060B-EC8A-4926-B293-04C01E17EE23}.TestResponses|Any CPU.Build.0 = TestResponses|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
