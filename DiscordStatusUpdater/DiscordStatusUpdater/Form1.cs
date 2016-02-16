@@ -10,11 +10,15 @@ namespace DiscordStatusUpdater
     public partial class Form1 : Form
     {
         DiscordClient client;
+        bool manual = false;
+        const int INTERVAL = 20500;
 
         public Form1(DiscordClient client)
         {
             InitializeComponent();
             this.client = client;
+            timer.Interval = 1;
+            timer.Enabled = true;
         }
 
         private string CheckForVideo()
@@ -64,6 +68,19 @@ namespace DiscordStatusUpdater
             return title;
         }
 
+        private void ChangeStatus()
+        {
+            string videoTitle = CheckForVideo();
+            textBox1.Text = videoTitle;
+            client.SetGame(videoTitle);
+        }
+
+        private void ChangeStatus(string status)
+        {
+            textBox1.Text = status;
+            client.SetGame(status);
+        }
+
         async private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             client.SetGame(string.Empty);
@@ -71,11 +88,45 @@ namespace DiscordStatusUpdater
             Application.Exit();
         }
 
+        private void ChangeMode()
+        {
+            manual = !manual;
+            button1.Text = "Change mode" + Environment.NewLine + "Currently ";
+            timer.Enabled = !manual;
+
+            if (manual)
+            {
+                button1.Text += "manual";
+                timer.Interval = 1;
+                textBox1.ReadOnly = false;
+            }
+            else
+            {
+                button1.Text += "automatic";
+                textBox1.ReadOnly = true;
+            }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-            string videoTitle = CheckForVideo();
-            textBox1.Text = videoTitle;
-            client.SetGame(videoTitle);
+            ChangeMode();
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            ChangeStatus();
+            timer.Interval = INTERVAL;
+            timer.Enabled = true;
+        }
+
+        private void textBox1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (!manual)
+                    ChangeMode();
+                ChangeStatus(textBox1.Text);
+            }
         }
     }
 }

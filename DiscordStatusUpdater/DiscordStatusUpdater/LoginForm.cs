@@ -8,6 +8,8 @@ namespace DiscordStatusUpdater
 {
     public partial class LoginForm : Form
     {
+        bool pressed = false;
+
         public LoginForm()
         {
             InitializeComponent();
@@ -38,12 +40,16 @@ namespace DiscordStatusUpdater
             DiscordClient client = new DiscordClient();
             try
             {
+                textBox1.Enabled = false;
+                textBox2.Enabled = false;
                 await client.Connect(textBox1.Text, textBox2.Text);
                 success = true;
             }
             catch (Exception)
             {
                 success = false;
+                textBox1.Enabled = true;
+                textBox2.Enabled = true;
             }
 
             if (success && (client.State == ConnectionState.Connected || client.State == ConnectionState.Connecting))
@@ -60,6 +66,21 @@ namespace DiscordStatusUpdater
             {
                 MessageBox.Show("Your email and/or password is incorrect", "Failed to login", MessageBoxButtons.OK);
             }
+        }
+
+        private void textBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && !pressed)
+            {
+                pressed = true;
+                button1_Click(sender, (EventArgs)e);
+            }
+        }
+
+        private void textBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                pressed = false;
         }
     }
 }

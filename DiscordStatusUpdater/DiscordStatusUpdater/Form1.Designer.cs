@@ -28,10 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.statusLabel = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // button1
@@ -56,19 +58,25 @@
             // statusLabel
             // 
             this.statusLabel.AutoSize = true;
-            this.statusLabel.Location = new System.Drawing.Point(239, 227);
+            this.statusLabel.Location = new System.Drawing.Point(12, 9);
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(46, 17);
+            this.statusLabel.Size = new System.Drawing.Size(101, 17);
             this.statusLabel.TabIndex = 2;
-            this.statusLabel.Text = "label1";
+            this.statusLabel.Text = "Current status:";
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 12);
-            this.textBox1.Multiline = true;
+            this.textBox1.Location = new System.Drawing.Point(12, 29);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(258, 47);
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(258, 22);
             this.textBox1.TabIndex = 3;
+            this.textBox1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.textBox1_PreviewKeyDown);
+            // 
+            // timer
+            // 
+            this.timer.Interval = 20500;
+            this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
             // Form1
             // 
@@ -93,6 +101,7 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Timer timer;
     }
 }
 
