@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
@@ -9,26 +10,31 @@ namespace DiscordStatusUpdater
     public partial class Form1 : Form
     {
         DiscordClient client;
-        string email, password;
 
-        public Form1()
+        public Form1(DiscordClient client)
         {
             InitializeComponent();
 
-            string[] loginInfo = File.ReadAllLines(@"C:\Users\Kevin\Desktop\login.txt");
-            email = loginInfo[0]; password = loginInfo[1];
-
-            client = new DiscordClient();
+            this.client = client;
+            textBox1.Text = CheckForVideo();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private string CheckForVideo()
+        {
+            string output = "";
+
+            Process[] processes = Process.GetProcesses();
+            foreach (Process p in processes)
+            {
+                output += p.MainWindowTitle + ";" + p.ProcessName + " - ";
+            }
+            return output;
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             client.Disconnect();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            client.Connect(email, password);
+            Application.Exit();
         }
     }
 }
