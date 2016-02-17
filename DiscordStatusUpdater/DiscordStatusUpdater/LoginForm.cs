@@ -15,6 +15,7 @@ namespace DiscordStatusUpdater
             InitializeComponent();
             textBox1.Text = Properties.Settings.Default.Email;
             textBox2.Text = Properties.Settings.Default.Password;
+            checkBox1.Checked = Properties.Settings.Default.Remember;
 
             Player[] players = new Player[] {
                 new Player("VLC", "vlc", "", " - VLC media player"),
@@ -54,8 +55,14 @@ namespace DiscordStatusUpdater
 
             if (success && (client.State == ConnectionState.Connected || client.State == ConnectionState.Connecting))
             {
+                if (checkBox1.Checked)
+                {
+                    textBox1.Text = "";
+                    textBox2.Text = "";
+                }
                 Properties.Settings.Default.Email = textBox1.Text;
                 Properties.Settings.Default.Password = textBox2.Text;
+                Properties.Settings.Default.Remember = checkBox1.Checked;
                 Properties.Settings.Default.Save();
 
                 textBox2.Text = "";
