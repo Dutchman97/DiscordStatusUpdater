@@ -12,14 +12,20 @@ namespace DiscordStatusUpdater
     {
         DiscordClient client;
         bool manual = false;
-        const int INTERVAL = 20500;
+        string pendingStatus = string.Empty;
+        const int CHECKINTERVAL = 10000, UPDATEINTERVAL = 10000;
 
         public Form1(DiscordClient client)
         {
             InitializeComponent();
             this.client = client;
-            timer.Interval = 1;
-            timer.Enabled = true;
+
+            checkTimer.Interval = 1;
+            checkTimer.Start();
+            updateTimer.Stop();
+
+            progressBar1.Style = ProgressBarStyle.Continuous;
+            progressBar1.MarqueeAnimationSpeed = UPDATEINTERVAL / 1000;
         }
 
         private string CheckForVideo()
@@ -72,32 +78,49 @@ namespace DiscordStatusUpdater
         private void ChangeStatus()
         {
             string videoTitle = CheckForVideo();
-            textBox1.Text = videoTitle;
-            client.SetGame(videoTitle);
+            ChangeStatus(videoTitle);
         }
 
         private void ChangeStatus(string status)
         {
-            textBox1.Text = status;
-            client.SetGame(status);
+            Console.WriteLine("Trying to change status to " + status);
+
+            if (status == textBox1.Text)
+                return;
+
+            Console.WriteLine("New status not equal to old status");
+
+            if (updateTimer.Enabled)
+            {
+                Console.WriteLine("Update timer enabled");
+                pendingStatus = status;
+            }
+            else
+            {
+                Console.WriteLine("Update timer disabled");
+                Console.WriteLine("Changed status to " + status);
+                updateTimer.Interval = UPDATEINTERVAL;
+                updateTimer.Start();
+                progressBar1.Style = ProgressBarStyle.Marquee;
+                textBox1.Text = status;
+                client.SetGame(status);
+            }
         }
 
         private void ChangeMode()
         {
             manual = !manual;
             button1.Text = "Change mode" + Environment.NewLine + "Currently ";
-            timer.Enabled = !manual;
+            checkTimer.Enabled = !manual;
 
             if (manual)
             {
                 button1.Text += "manual";
-                timer.Interval = 1;
-                textBox2.ReadOnly = false;
             }
             else
             {
                 button1.Text += "automatic";
-                textBox2.ReadOnly = true;
+                checkTimer.Interval = 1;
             }
         }
 
@@ -106,19 +129,31 @@ namespace DiscordStatusUpdater
             ChangeMode();
         }
 
-        private void timer_Tick(object sender, EventArgs e)
+        private void checkTimer_Tick(object sender, EventArgs e)
         {
             ChangeStatus();
-            timer.Interval = INTERVAL;
-            timer.Enabled = true;
+            checkTimer.Interval = CHECKINTERVAL;
+            checkTimer.Start();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            client.SetGame("");
+            if (updateTimer.Enabled)
+            {
+                DialogResult result = MessageBox.Show("Your current status message will stay the same if you close the program now.\nAre you sure you want to close the program?",
+                    "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+
+                if (result == DialogResult.No)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+            
+            client.SetGame(string.Empty);
 
             // Yes, a Thread.Sleep() since appearantly calling SetGame() does not wait for the new status to get sent.
-            Thread.Sleep(1000);
+            Thread.Sleep(500);
             client.Disconnect();
         }
 
@@ -130,6 +165,16 @@ namespace DiscordStatusUpdater
         private void button2_Click(object sender, EventArgs e)
         {
             textBox2_KeyDown(sender, new KeyEventArgs(Keys.Enter));
+        }
+
+        private void updateTimer_Tick(object sender, EventArgs e)
+        {
+            Console.WriteLine("Update timer ticked");
+            updateTimer.Stop();
+            progressBar1.Style = ProgressBarStyle.Continuous;
+            if (pendingStatus != string.Empty)
+                ChangeStatus(pendingStatus);
+            pendingStatus = string.Empty;
         }
 
         private void textBox2_KeyDown(object sender, KeyEventArgs e)

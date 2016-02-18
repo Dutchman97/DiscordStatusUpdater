@@ -32,16 +32,18 @@
             this.button1 = new System.Windows.Forms.Button();
             this.statusLabel = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.timer = new System.Windows.Forms.Timer(this.components);
+            this.checkTimer = new System.Windows.Forms.Timer(this.components);
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
+            this.updateTimer = new System.Windows.Forms.Timer(this.components);
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(12, 57);
+            this.button1.Location = new System.Drawing.Point(12, 101);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(258, 85);
+            this.button1.Size = new System.Drawing.Size(258, 49);
             this.button1.TabIndex = 0;
             this.button1.Text = "Change mode\r\nCurrently automatic";
             this.button1.UseVisualStyleBackColor = true;
@@ -64,14 +66,14 @@
             this.textBox1.Size = new System.Drawing.Size(258, 22);
             this.textBox1.TabIndex = 3;
             // 
-            // timer
+            // checkTimer
             // 
-            this.timer.Interval = 20500;
-            this.timer.Tick += new System.EventHandler(this.timer_Tick);
+            this.checkTimer.Interval = 20500;
+            this.checkTimer.Tick += new System.EventHandler(this.checkTimer_Tick);
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(12, 148);
+            this.textBox2.Location = new System.Drawing.Point(12, 156);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(170, 22);
             this.textBox2.TabIndex = 4;
@@ -79,19 +81,33 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(188, 148);
+            this.button2.Location = new System.Drawing.Point(188, 156);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(82, 23);
+            this.button2.Size = new System.Drawing.Size(82, 22);
             this.button2.TabIndex = 5;
             this.button2.Text = "Set status";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // updateTimer
+            // 
+            this.updateTimer.Tick += new System.EventHandler(this.updateTimer_Tick);
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Enabled = false;
+            this.progressBar1.Location = new System.Drawing.Point(12, 57);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(258, 23);
+            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.progressBar1.TabIndex = 6;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(282, 182);
+            this.ClientSize = new System.Drawing.Size(282, 190);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
@@ -111,9 +127,11 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Timer timer;
+        private System.Windows.Forms.Timer checkTimer;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Timer updateTimer;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
 
