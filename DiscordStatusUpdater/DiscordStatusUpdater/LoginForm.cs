@@ -55,7 +55,7 @@ namespace DiscordStatusUpdater
 
             if (success && (client.State == ConnectionState.Connected || client.State == ConnectionState.Connecting))
             {
-                if (checkBox1.Checked)
+                if (!checkBox1.Checked)
                 {
                     textBox1.Text = "";
                     textBox2.Text = "";

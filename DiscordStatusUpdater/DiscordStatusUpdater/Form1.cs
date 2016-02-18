@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
@@ -81,13 +82,6 @@ namespace DiscordStatusUpdater
             client.SetGame(status);
         }
 
-        async private void Form1_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            client.SetGame(string.Empty);
-            await client.Disconnect();
-            Application.Exit();
-        }
-
         private void ChangeMode()
         {
             manual = !manual;
@@ -98,12 +92,12 @@ namespace DiscordStatusUpdater
             {
                 button1.Text += "manual";
                 timer.Interval = 1;
-                textBox1.ReadOnly = false;
+                textBox2.ReadOnly = false;
             }
             else
             {
                 button1.Text += "automatic";
-                textBox1.ReadOnly = true;
+                textBox2.ReadOnly = true;
             }
         }
 
@@ -119,13 +113,32 @@ namespace DiscordStatusUpdater
             timer.Enabled = true;
         }
 
-        private void textBox1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            client.SetGame("");
+
+            // Yes, a Thread.Sleep() since appearantly calling SetGame() does not wait for the new status to get sent.
+            Thread.Sleep(1000);
+            client.Disconnect();
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            textBox2_KeyDown(sender, new KeyEventArgs(Keys.Enter));
+        }
+
+        private void textBox2_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
                 if (!manual)
                     ChangeMode();
-                ChangeStatus(textBox1.Text);
+                ChangeStatus(textBox2.Text);
             }
         }
     }
