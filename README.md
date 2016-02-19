@@ -2,13 +2,13 @@
 
 A replacent to my older (and previously private) [Python version of DiscordStatusUpdater](https://my.mixtape.moe/wqpgur.zip).
 
-#Features:
+## Features:
 
 * Fancy GUI with login screen
 * Automatically update your status by tracking which video you are watching (with currently only support for MPC-HC, MPC-BE, and VLC)
 * Manually set a custom status
 
-#Todo:
+## Todo:
 
 * Add support for tracking other (user-defined) video players
 * Add support for (user-defined) file extensions other than mkv, mp4, and avi files.
