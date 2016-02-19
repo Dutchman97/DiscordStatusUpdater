@@ -38,20 +38,32 @@ namespace DiscordStatusUpdater
 
         private string ParseVideoTitle(Player player, string title)
         {
+            Console.WriteLine("Title: " + title);
             // Remove prefix and suffix of the player from the title.
-            int prefixIndex = title.ToLower().IndexOf(player.TitlePrefix.ToLower());
-            int suffixIndex = title.ToLower().LastIndexOf(player.TitleSuffix.ToLower());
-            title = title.Remove(suffixIndex);
-            title = title.Substring(prefixIndex + player.TitlePrefix.Length);
+            if (player.TitleSuffix != string.Empty)
+            {
+                int suffixIndex = title.ToLower().LastIndexOf(player.TitleSuffix.ToLower());
+                title = title.Remove(suffixIndex);
+                Console.WriteLine("Suffix: " + player.TitleSuffix + ", at: " + suffixIndex.ToString());
+            }
+            if (player.TitlePrefix != string.Empty)
+            {
+                int prefixIndex = title.ToLower().IndexOf(player.TitlePrefix.ToLower());
+                title = title.Substring(prefixIndex + player.TitlePrefix.Length);
+                Console.WriteLine("Prefix: " + player.TitlePrefix + ", at: " + prefixIndex.ToString());
+            }
 
+            Console.WriteLine("Title minus pre/suffix: " + title);
             // Remove the file extension from the title
             foreach (string extension in Properties.Settings.Default.Extensions)
                 if (title.EndsWith(extension, true, null))
                 {
                     title = title.Remove(title.Length - 1 - extension.Length);
+                    Console.WriteLine("Extension: " + extension);
                     break;
                 }
 
+            Console.WriteLine("Title minus extension: " + title);
             // Remove square brackets and everything inbetween them.
             while (true)
             {
@@ -63,12 +75,15 @@ namespace DiscordStatusUpdater
                 title = title.Remove(first, last - first + 1);
             }
 
+            Console.WriteLine("Title minus brackets: " + title);
             // Replace all underscores with whitespace.
             title = title.Replace('_', ' ');
 
+            Console.WriteLine("Title minus underscores: " + title);
             // Remove all leading and trailing whitespace.
             title = title.Trim();
 
+            Console.WriteLine("Final title: " + title);
             return title;
         }
 
@@ -160,6 +175,7 @@ namespace DiscordStatusUpdater
                 //return;
             }
 
+            currentStatusTextBox.Text = "Removing status";
             client.SetGame(string.Empty);
 
             // Yes, a Thread.Sleep() since appearantly calling SetGame() does not wait for the new status to get sent.
