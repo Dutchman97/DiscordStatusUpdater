@@ -33,7 +33,7 @@ namespace DiscordStatusUpdater
             Properties.Settings.Default.Save();
         }
 
-        async private void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
             bool success;
 
@@ -42,7 +42,7 @@ namespace DiscordStatusUpdater
             {
                 textBox1.Enabled = false;
                 textBox2.Enabled = false;
-                await client.Connect(textBox1.Text, textBox2.Text);
+                client.Connect(textBox1.Text, textBox2.Text);
                 success = true;
             }
             catch (Exception)
