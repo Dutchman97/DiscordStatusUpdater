@@ -175,7 +175,7 @@ namespace DiscordStatusUpdater
                 //return;
             }
 
-            currentStatusTextBox.Text = "Removing status";
+            this.Text = "Closing...";
             client.SetGame(string.Empty);
 
             // Yes, a Thread.Sleep() since appearantly calling SetGame() does not wait for the new status to get sent.
