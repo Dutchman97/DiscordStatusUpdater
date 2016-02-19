@@ -23,6 +23,7 @@ namespace DiscordStatusUpdater
             checkTimer.Start();
             updateTimer.Stop();
             updateTimerLabel.ForeColor = System.Drawing.Color.Green;
+            updateTimerLabel.Text = "Status update possible";
         }
 
         private string GetVideoTitle()
@@ -212,6 +213,11 @@ namespace DiscordStatusUpdater
             MessageBox.Show("Discord only allows status updates every roughly 10 seconds.\n" +
                 "Any status update less than 10 seconds after another status update will be pushed after the 10 seconds are over.",
                 "Update speed limit", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+        }
+
+        private void updateTimerLabel_ForeColorChanged(object sender, EventArgs e)
+        {
+            helpLabel.Location = new System.Drawing.Point(updateTimerLabel.Location.X + updateTimerLabel.Size.Width - 5, updateTimerLabel.Location.Y);
         }
 
         private void statusTextBox_KeyDown(object sender, KeyEventArgs e)
