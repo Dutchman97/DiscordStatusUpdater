@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Collections;
 using System.Windows.Forms;
 using Discord;
@@ -35,43 +34,41 @@ namespace DiscordStatusUpdater
 
         private void button1_Click(object sender, EventArgs e)
         {
-            bool success;
-
             DiscordClient client = new DiscordClient();
             try
             {
                 textBox1.Enabled = false;
                 textBox2.Enabled = false;
                 client.Connect(textBox1.Text, textBox2.Text);
-                success = true;
+
+                if (client.State == ConnectionState.Connected || client.State == ConnectionState.Connecting)
+                {
+                    if (!checkBox1.Checked)
+                    {
+                        textBox1.Text = "";
+                        textBox2.Text = "";
+                    }
+                    Properties.Settings.Default.Email = textBox1.Text;
+                    Properties.Settings.Default.Password = textBox2.Text;
+                    Properties.Settings.Default.Remember = checkBox1.Checked;
+                    Properties.Settings.Default.Save();
+
+                    textBox2.Text = "";
+                    this.Hide();
+                    MainForm main = new MainForm(client);
+                    main.Owner = this;
+                    main.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Login failed. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                    throw new Exception("Login failed");
+                }
             }
             catch (Exception)
             {
-                success = false;
                 textBox1.Enabled = true;
                 textBox2.Enabled = true;
-            }
-
-            if (success && (client.State == ConnectionState.Connected || client.State == ConnectionState.Connecting))
-            {
-                if (!checkBox1.Checked)
-                {
-                    textBox1.Text = "";
-                    textBox2.Text = "";
-                }
-                Properties.Settings.Default.Email = textBox1.Text;
-                Properties.Settings.Default.Password = textBox2.Text;
-                Properties.Settings.Default.Remember = checkBox1.Checked;
-                Properties.Settings.Default.Save();
-
-                textBox2.Text = "";
-                this.Hide();
-                MainForm main = new MainForm(client);
-                main.Owner = this;
-                main.Show();
-            }
-            else
-            {
                 MessageBox.Show("Your email and/or password is incorrect", "Failed to login", MessageBoxButtons.OK);
             }
         }
