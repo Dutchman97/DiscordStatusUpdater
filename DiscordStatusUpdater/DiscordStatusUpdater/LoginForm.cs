@@ -35,7 +35,6 @@ namespace DiscordStatusUpdater
 
         async private void button1_Click(object sender, EventArgs e)
         {
-            string[] loginInfo = File.ReadAllLines(@"C:\Users\Kevin\Desktop\login.txt");
             bool success;
 
             DiscordClient client = new DiscordClient();
