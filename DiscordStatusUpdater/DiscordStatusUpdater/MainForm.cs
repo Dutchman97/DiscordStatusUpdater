@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
-using System.Collections.Generic;
-using System.IO;
 using System.Windows.Forms;
 using Discord;
 
@@ -24,6 +22,7 @@ namespace DiscordStatusUpdater
             checkTimer.Interval = 1;
             checkTimer.Start();
             updateTimer.Stop();
+            updateTimerLabel.ForeColor = System.Drawing.Color.Green;
         }
 
         private string GetVideoTitle()
@@ -103,6 +102,8 @@ namespace DiscordStatusUpdater
                 Console.WriteLine("Changed status to " + status);
                 updateTimer.Interval = UPDATEINTERVAL;
                 updateTimer.Start();
+                updateTimerLabel.Text = "No status update possible yet";
+                updateTimerLabel.ForeColor = System.Drawing.Color.Red;
 
                 currentStatusTextBox.Text = status;
                 client.SetGame(status);
@@ -140,25 +141,25 @@ namespace DiscordStatusUpdater
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (updateTimer.Enabled)
+            if (updateTimer.Enabled && currentStatusTextBox.Text != string.Empty)
             {
-                //DialogResult result = MessageBox.Show("Your current status message will stay the same if you close the program now.\nAre you sure you want to close the program?",
-                //    "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+                DialogResult result = MessageBox.Show("Your current status message will stay the same if you close the program now.\nAre you sure you want to close the program?",
+                    "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
 
-                //if (result == DialogResult.No)
-                //{
-                //    e.Cancel = true;
-                //    return;
-                //}
-                e.Cancel = true;
-                ChangeStatus(string.Empty);
-                updateTimer.Tick += (sender1, e1) =>
+                if (result == DialogResult.No)
                 {
-                    MainForm_FormClosing(sender, e);
-                };
-                return;
+                    e.Cancel = true;
+                    return;
+                }
+                //e.Cancel = true;
+                //ChangeStatus(string.Empty);
+                //updateTimer.Tick += (sender1, e1) =>
+                //{
+                //    MainForm_FormClosing(sender, e);
+                //};
+                //return;
             }
-            
+
             client.SetGame(string.Empty);
 
             // Yes, a Thread.Sleep() since appearantly calling SetGame() does not wait for the new status to get sent.
@@ -179,6 +180,8 @@ namespace DiscordStatusUpdater
         private void updateTimer_Tick(object sender, EventArgs e)
         {
             Console.WriteLine("Update timer ticked");
+            updateTimerLabel.Text = "Status update possible";
+            updateTimerLabel.ForeColor = System.Drawing.Color.Green;
             updateTimer.Stop();
 
             if (pendingStatus != null)
@@ -188,7 +191,7 @@ namespace DiscordStatusUpdater
             pendingStatus = null;
         }
 
-        private void pendingLabel_MouseClick(object sender, MouseEventArgs e)
+        private void updateLabel_MouseClick(object sender, MouseEventArgs e)
         {
             MessageBox.Show("Discord only allows status updates every roughly 10 seconds.\n" +
                 "Any status update less than 10 seconds after another status update will be pushed after the 10 seconds are over.",
