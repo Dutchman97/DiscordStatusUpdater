@@ -8,14 +8,15 @@ using Discord;
 
 namespace DiscordStatusUpdater
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         DiscordClient client;
         bool manual = false;
-        string pendingStatus = string.Empty;
+        // The String class instead of the string struct, because now 'null' can represent no status change
+        String pendingStatus = null;
         const int CHECKINTERVAL = 10000, UPDATEINTERVAL = 10000;
 
-        public Form1(DiscordClient client)
+        public MainForm(DiscordClient client)
         {
             InitializeComponent();
             this.client = client;
@@ -23,23 +24,20 @@ namespace DiscordStatusUpdater
             checkTimer.Interval = 1;
             checkTimer.Start();
             updateTimer.Stop();
-
-            progressBar1.Style = ProgressBarStyle.Continuous;
-            progressBar1.MarqueeAnimationSpeed = UPDATEINTERVAL / 1000;
         }
 
-        private string CheckForVideo()
+        private string GetVideoTitle()
         {
             Process[] processes = Process.GetProcesses();
             foreach (Process proc in processes)
                 if (!string.IsNullOrWhiteSpace(proc.MainWindowTitle))
                     foreach (Player player in Properties.Settings.Default.Players)
                         if (proc.ProcessName.ToLower() == player.FileName.ToLower())
-                            return GetVideoTitle(player, proc.MainWindowTitle);
+                            return ParseVideoTitle(player, proc.MainWindowTitle);
             return string.Empty;
         }
 
-        private string GetVideoTitle(Player player, string title)
+        private string ParseVideoTitle(Player player, string title)
         {
             // Remove prefix and suffix of the player from the title.
             int prefixIndex = title.ToLower().IndexOf(player.TitlePrefix.ToLower());
@@ -77,7 +75,7 @@ namespace DiscordStatusUpdater
 
         private void ChangeStatus()
         {
-            string videoTitle = CheckForVideo();
+            string videoTitle = GetVideoTitle();
             ChangeStatus(videoTitle);
         }
 
@@ -85,7 +83,7 @@ namespace DiscordStatusUpdater
         {
             Console.WriteLine("Trying to change status to " + status);
 
-            if (status == textBox1.Text)
+            if (status == currentStatusTextBox.Text)
                 return;
 
             Console.WriteLine("New status not equal to old status");
@@ -94,6 +92,10 @@ namespace DiscordStatusUpdater
             {
                 Console.WriteLine("Update timer enabled");
                 pendingStatus = status;
+                if (status == string.Empty)
+                    pendingLabel.Text = "Pending status removal";
+                else
+                    pendingLabel.Text = "Pending status update: " + status;
             }
             else
             {
@@ -101,8 +103,8 @@ namespace DiscordStatusUpdater
                 Console.WriteLine("Changed status to " + status);
                 updateTimer.Interval = UPDATEINTERVAL;
                 updateTimer.Start();
-                progressBar1.Style = ProgressBarStyle.Marquee;
-                textBox1.Text = status;
+
+                currentStatusTextBox.Text = status;
                 client.SetGame(status);
             }
         }
@@ -110,21 +112,22 @@ namespace DiscordStatusUpdater
         private void ChangeMode()
         {
             manual = !manual;
-            button1.Text = "Change mode" + Environment.NewLine + "Currently ";
-            checkTimer.Enabled = !manual;
+            modeButton.Text = "Click to change mode." + Environment.NewLine + "Currently set to ";
 
             if (manual)
             {
-                button1.Text += "manual";
+                modeButton.Text += "manual.";
+                checkTimer.Stop();
             }
             else
             {
-                button1.Text += "automatic";
+                modeButton.Text += "automatic.";
                 checkTimer.Interval = 1;
+                checkTimer.Start();
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void modeButton_Click(object sender, EventArgs e)
         {
             ChangeMode();
         }
@@ -133,21 +136,27 @@ namespace DiscordStatusUpdater
         {
             ChangeStatus();
             checkTimer.Interval = CHECKINTERVAL;
-            checkTimer.Start();
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (updateTimer.Enabled)
             {
-                DialogResult result = MessageBox.Show("Your current status message will stay the same if you close the program now.\nAre you sure you want to close the program?",
-                    "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+                //DialogResult result = MessageBox.Show("Your current status message will stay the same if you close the program now.\nAre you sure you want to close the program?",
+                //    "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
 
-                if (result == DialogResult.No)
+                //if (result == DialogResult.No)
+                //{
+                //    e.Cancel = true;
+                //    return;
+                //}
+                e.Cancel = true;
+                ChangeStatus(string.Empty);
+                updateTimer.Tick += (sender1, e1) =>
                 {
-                    e.Cancel = true;
-                    return;
-                }
+                    MainForm_FormClosing(sender, e);
+                };
+                return;
             }
             
             client.SetGame(string.Empty);
@@ -157,33 +166,42 @@ namespace DiscordStatusUpdater
             client.Disconnect();
         }
 
-        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void statusButton_Click(object sender, EventArgs e)
         {
-            textBox2_KeyDown(sender, new KeyEventArgs(Keys.Enter));
+            statusTextBox_KeyDown(sender, new KeyEventArgs(Keys.Enter));
         }
 
         private void updateTimer_Tick(object sender, EventArgs e)
         {
             Console.WriteLine("Update timer ticked");
             updateTimer.Stop();
-            progressBar1.Style = ProgressBarStyle.Continuous;
-            if (pendingStatus != string.Empty)
+
+            if (pendingStatus != null)
                 ChangeStatus(pendingStatus);
-            pendingStatus = string.Empty;
+
+            pendingLabel.Text = "No pending status update";
+            pendingStatus = null;
         }
 
-        private void textBox2_KeyDown(object sender, KeyEventArgs e)
+        private void pendingLabel_MouseClick(object sender, MouseEventArgs e)
+        {
+            MessageBox.Show("Discord only allows status updates every roughly 10 seconds.\n" +
+                "Any status update less than 10 seconds after another status update will be pushed after the 10 seconds are over.",
+                "Update speed limit", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+        }
+
+        private void statusTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
                 if (!manual)
                     ChangeMode();
-                ChangeStatus(textBox2.Text);
+                ChangeStatus(statusTextBox.Text);
             }
         }
     }

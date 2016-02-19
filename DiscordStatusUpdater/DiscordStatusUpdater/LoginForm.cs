@@ -67,7 +67,9 @@ namespace DiscordStatusUpdater
 
                 textBox2.Text = "";
                 this.Hide();
-                new Form1(client).ShowDialog();
+                MainForm main = new MainForm(client);
+                main.Owner = this;
+                main.Show();
             }
             else
             {
