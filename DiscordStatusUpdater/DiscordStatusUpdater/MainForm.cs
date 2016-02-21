@@ -98,7 +98,7 @@ namespace DiscordStatusUpdater
         {
             Console.WriteLine("Trying to change status to " + status);
 
-            if (status == currentStatusTextBox.Text)
+            if (status == statusTextBox.Text)
                 return;
 
             Console.WriteLine("New status not equal to old status");
@@ -121,7 +121,7 @@ namespace DiscordStatusUpdater
                 updateTimerLabel.Text = "No status update possible yet";
                 updateTimerLabel.ForeColor = System.Drawing.Color.Red;
 
-                currentStatusTextBox.Text = status;
+                statusTextBox.Text = status;
                 client.SetGame(status);
             }
         }
@@ -157,7 +157,7 @@ namespace DiscordStatusUpdater
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (updateTimer.Enabled && currentStatusTextBox.Text != string.Empty)
+            if (updateTimer.Enabled && statusTextBox.Text != string.Empty)
             {
                 DialogResult result = MessageBox.Show("Your current status message will stay the same if you close the program now.\nAre you sure you want to close the program?",
                     "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
@@ -189,9 +189,9 @@ namespace DiscordStatusUpdater
             Application.Exit();
         }
 
-        private void statusButton_Click(object sender, EventArgs e)
+        private void setStatusButton_Click(object sender, EventArgs e)
         {
-            statusTextBox_KeyDown(sender, new KeyEventArgs(Keys.Enter));
+            setStatusTextBox_KeyDown(sender, new KeyEventArgs(Keys.Enter));
         }
 
         private void updateTimer_Tick(object sender, EventArgs e)
@@ -220,13 +220,13 @@ namespace DiscordStatusUpdater
             helpLabel.Location = new System.Drawing.Point(updateTimerLabel.Location.X + updateTimerLabel.Size.Width - 5, updateTimerLabel.Location.Y);
         }
 
-        private void statusTextBox_KeyDown(object sender, KeyEventArgs e)
+        private void setStatusTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
                 if (!manual)
                     ChangeMode();
-                ChangeStatus(statusTextBox.Text);
+                ChangeStatus(setStatusTextBox.Text);
             }
         }
     }

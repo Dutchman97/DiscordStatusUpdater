@@ -31,23 +31,24 @@
             this.components = new System.ComponentModel.Container();
             this.modeButton = new System.Windows.Forms.Button();
             this.statusLabel = new System.Windows.Forms.Label();
-            this.currentStatusTextBox = new System.Windows.Forms.TextBox();
-            this.checkTimer = new System.Windows.Forms.Timer(this.components);
             this.statusTextBox = new System.Windows.Forms.TextBox();
-            this.statusButton = new System.Windows.Forms.Button();
+            this.checkTimer = new System.Windows.Forms.Timer(this.components);
+            this.setStatusTextBox = new System.Windows.Forms.TextBox();
+            this.setStatusButton = new System.Windows.Forms.Button();
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.pendingLabel = new System.Windows.Forms.Label();
             this.updateTimerLabel = new System.Windows.Forms.Label();
             this.helpLabel = new System.Windows.Forms.Label();
+            this.settingsButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // modeButton
             // 
             this.modeButton.Location = new System.Drawing.Point(12, 101);
             this.modeButton.Name = "modeButton";
-            this.modeButton.Size = new System.Drawing.Size(258, 49);
+            this.modeButton.Size = new System.Drawing.Size(170, 49);
             this.modeButton.TabIndex = 0;
-            this.modeButton.Text = "Click to change mode.\r\nCurrently set to automatic.";
+            this.modeButton.Text = "Click to change mode\r\nCurrently automatic";
             this.modeButton.UseVisualStyleBackColor = true;
             this.modeButton.Click += new System.EventHandler(this.modeButton_Click);
             // 
@@ -60,36 +61,36 @@
             this.statusLabel.TabIndex = 2;
             this.statusLabel.Text = "Current status:";
             // 
-            // currentStatusTextBox
+            // statusTextBox
             // 
-            this.currentStatusTextBox.Location = new System.Drawing.Point(12, 29);
-            this.currentStatusTextBox.Name = "currentStatusTextBox";
-            this.currentStatusTextBox.ReadOnly = true;
-            this.currentStatusTextBox.Size = new System.Drawing.Size(258, 22);
-            this.currentStatusTextBox.TabIndex = 3;
+            this.statusTextBox.Location = new System.Drawing.Point(12, 29);
+            this.statusTextBox.Name = "statusTextBox";
+            this.statusTextBox.ReadOnly = true;
+            this.statusTextBox.Size = new System.Drawing.Size(258, 22);
+            this.statusTextBox.TabIndex = 3;
             // 
             // checkTimer
             // 
             this.checkTimer.Interval = 20500;
             this.checkTimer.Tick += new System.EventHandler(this.checkTimer_Tick);
             // 
-            // statusTextBox
+            // setStatusTextBox
             // 
-            this.statusTextBox.Location = new System.Drawing.Point(12, 156);
-            this.statusTextBox.Name = "statusTextBox";
-            this.statusTextBox.Size = new System.Drawing.Size(170, 22);
-            this.statusTextBox.TabIndex = 4;
-            this.statusTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.statusTextBox_KeyDown);
+            this.setStatusTextBox.Location = new System.Drawing.Point(12, 156);
+            this.setStatusTextBox.Name = "setStatusTextBox";
+            this.setStatusTextBox.Size = new System.Drawing.Size(170, 22);
+            this.setStatusTextBox.TabIndex = 4;
+            this.setStatusTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.setStatusTextBox_KeyDown);
             // 
-            // statusButton
+            // setStatusButton
             // 
-            this.statusButton.Location = new System.Drawing.Point(188, 155);
-            this.statusButton.Name = "statusButton";
-            this.statusButton.Size = new System.Drawing.Size(82, 22);
-            this.statusButton.TabIndex = 5;
-            this.statusButton.Text = "Set status";
-            this.statusButton.UseVisualStyleBackColor = true;
-            this.statusButton.Click += new System.EventHandler(this.statusButton_Click);
+            this.setStatusButton.Location = new System.Drawing.Point(188, 155);
+            this.setStatusButton.Name = "setStatusButton";
+            this.setStatusButton.Size = new System.Drawing.Size(82, 22);
+            this.setStatusButton.TabIndex = 5;
+            this.setStatusButton.Text = "Set status";
+            this.setStatusButton.UseVisualStyleBackColor = true;
+            this.setStatusButton.Click += new System.EventHandler(this.setStatusButton_Click);
             // 
             // updateTimer
             // 
@@ -130,16 +131,26 @@
             this.helpLabel.Text = "(?)";
             this.helpLabel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.updateLabel_MouseClick);
             // 
+            // settingsButton
+            // 
+            this.settingsButton.Location = new System.Drawing.Point(188, 101);
+            this.settingsButton.Name = "settingsButton";
+            this.settingsButton.Size = new System.Drawing.Size(82, 49);
+            this.settingsButton.TabIndex = 10;
+            this.settingsButton.Text = "Settings";
+            this.settingsButton.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(282, 190);
+            this.Controls.Add(this.settingsButton);
             this.Controls.Add(this.helpLabel);
             this.Controls.Add(this.updateTimerLabel);
             this.Controls.Add(this.pendingLabel);
-            this.Controls.Add(this.statusButton);
+            this.Controls.Add(this.setStatusButton);
+            this.Controls.Add(this.setStatusTextBox);
             this.Controls.Add(this.statusTextBox);
-            this.Controls.Add(this.currentStatusTextBox);
             this.Controls.Add(this.statusLabel);
             this.Controls.Add(this.modeButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -158,14 +169,15 @@
 
         private System.Windows.Forms.Button modeButton;
         private System.Windows.Forms.Label statusLabel;
-        private System.Windows.Forms.TextBox currentStatusTextBox;
-        private System.Windows.Forms.Timer checkTimer;
         private System.Windows.Forms.TextBox statusTextBox;
-        private System.Windows.Forms.Button statusButton;
+        private System.Windows.Forms.Timer checkTimer;
+        private System.Windows.Forms.TextBox setStatusTextBox;
+        private System.Windows.Forms.Button setStatusButton;
         private System.Windows.Forms.Timer updateTimer;
         private System.Windows.Forms.Label pendingLabel;
         private System.Windows.Forms.Label updateTimerLabel;
         private System.Windows.Forms.Label helpLabel;
+        private System.Windows.Forms.Button settingsButton;
     }
 }
 
