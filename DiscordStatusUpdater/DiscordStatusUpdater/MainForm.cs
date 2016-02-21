@@ -217,7 +217,7 @@ namespace DiscordStatusUpdater
 
         private void updateTimerLabel_ForeColorChanged(object sender, EventArgs e)
         {
-            helpLabel.Location = new System.Drawing.Point(updateTimerLabel.Location.X + updateTimerLabel.Size.Width - 5, updateTimerLabel.Location.Y);
+            helpLabel.Location = new System.Drawing.Point(updateTimerLabel.Location.X + updateTimerLabel.Size.Width - 2, updateTimerLabel.Location.Y);
         }
 
         private void setStatusTextBox_KeyDown(object sender, KeyEventArgs e)
