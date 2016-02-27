@@ -13,6 +13,7 @@ namespace DiscordStatusUpdater
         // The String class instead of the string struct, because now 'null' can represent no status change
         String pendingStatus = null;
         const int CHECKINTERVAL = 10000, UPDATEINTERVAL = 10000;
+        const string PLAYINGTEXT = "Playing ";
 
         public MainForm(DiscordClient client)
         {
@@ -97,8 +98,8 @@ namespace DiscordStatusUpdater
         private void ChangeStatus(string status)
         {
             Console.WriteLine("Trying to change status to " + status);
-
-            if (status == statusTextBox.Text)
+            
+            if ((status == string.Empty && statusTextBox.Text == string.Empty) || (statusTextBox.Text != string.Empty && status == statusTextBox.Text.Substring(PLAYINGTEXT.Length)))
                 return;
 
             Console.WriteLine("New status not equal to old status");
@@ -120,8 +121,12 @@ namespace DiscordStatusUpdater
                 updateTimer.Start();
                 updateTimerLabel.Text = "No status update possible yet";
                 updateTimerLabel.ForeColor = System.Drawing.Color.Red;
+                
+                if (status == string.Empty)
+                    statusTextBox.Text = "";
+                else
+                    statusTextBox.Rtf = @"{\rtf1\ansi {\colortbl;\red0\green0\blue0;}\cf1" + PLAYINGTEXT + @"\b\cf0 " + status + @"\b0 }";
 
-                statusTextBox.Text = status;
                 client.SetGame(status);
             }
         }
@@ -157,7 +162,7 @@ namespace DiscordStatusUpdater
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (updateTimer.Enabled && statusTextBox.Text != string.Empty)
+            if (updateTimer.Enabled && statusTextBox.Text.Length > 0 && statusTextBox.Text.Substring(PLAYINGTEXT.Length) != string.Empty)
             {
                 DialogResult result = MessageBox.Show("Your current status message will stay the same if you close the program now.\nAre you sure you want to close the program?",
                     "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
@@ -167,20 +172,19 @@ namespace DiscordStatusUpdater
                     e.Cancel = true;
                     return;
                 }
-                //e.Cancel = true;
-                //ChangeStatus(string.Empty);
-                //updateTimer.Tick += (sender1, e1) =>
-                //{
-                //    MainForm_FormClosing(sender, e);
-                //};
-                //return;
             }
 
+            updateTimer.Stop();
             this.Text = "Closing...";
-            client.SetGame(string.Empty);
 
-            // Yes, a Thread.Sleep() since appearantly calling SetGame() does not wait for the new status to get sent.
-            Thread.Sleep(500);
+            if (statusTextBox.Text != string.Empty)
+            {
+                client.SetGame(string.Empty);
+
+                // Yes, a Thread.Sleep() since appearantly calling SetGame() does not wait for the new status to get sent.
+                Thread.Sleep(300);
+            }
+
             client.Disconnect();
         }
 

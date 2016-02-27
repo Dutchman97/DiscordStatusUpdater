@@ -43,6 +43,9 @@ namespace DiscordStatusUpdater
 
                 if (client.State == ConnectionState.Connected || client.State == ConnectionState.Connecting)
                 {
+                    // The best way to wait of course
+                    while (client.State == ConnectionState.Connecting) System.Threading.Thread.Sleep(10);
+
                     if (!checkBox1.Checked)
                     {
                         textBox1.Text = "";

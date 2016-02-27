@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.modeButton = new System.Windows.Forms.Button();
             this.statusLabel = new System.Windows.Forms.Label();
-            this.statusTextBox = new System.Windows.Forms.TextBox();
             this.checkTimer = new System.Windows.Forms.Timer(this.components);
             this.setStatusTextBox = new System.Windows.Forms.TextBox();
             this.setStatusButton = new System.Windows.Forms.Button();
@@ -40,6 +39,7 @@
             this.updateTimerLabel = new System.Windows.Forms.Label();
             this.helpLabel = new System.Windows.Forms.Label();
             this.settingsButton = new System.Windows.Forms.Button();
+            this.statusTextBox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // modeButton
@@ -61,14 +61,6 @@
             this.statusLabel.TabIndex = 2;
             this.statusLabel.Text = "Current status:";
             // 
-            // statusTextBox
-            // 
-            this.statusTextBox.Location = new System.Drawing.Point(12, 29);
-            this.statusTextBox.Name = "statusTextBox";
-            this.statusTextBox.ReadOnly = true;
-            this.statusTextBox.Size = new System.Drawing.Size(258, 22);
-            this.statusTextBox.TabIndex = 3;
-            // 
             // checkTimer
             // 
             this.checkTimer.Interval = 20500;
@@ -86,7 +78,7 @@
             // 
             this.setStatusButton.Location = new System.Drawing.Point(188, 155);
             this.setStatusButton.Name = "setStatusButton";
-            this.setStatusButton.Size = new System.Drawing.Size(82, 22);
+            this.setStatusButton.Size = new System.Drawing.Size(82, 24);
             this.setStatusButton.TabIndex = 5;
             this.setStatusButton.Text = "Set status";
             this.setStatusButton.UseVisualStyleBackColor = true;
@@ -140,17 +132,28 @@
             this.settingsButton.Text = "Settings";
             this.settingsButton.UseVisualStyleBackColor = true;
             // 
+            // statusTextBox
+            // 
+            this.statusTextBox.Enabled = false;
+            this.statusTextBox.Location = new System.Drawing.Point(12, 29);
+            this.statusTextBox.Multiline = false;
+            this.statusTextBox.Name = "statusTextBox";
+            this.statusTextBox.ReadOnly = true;
+            this.statusTextBox.Size = new System.Drawing.Size(258, 22);
+            this.statusTextBox.TabIndex = 11;
+            this.statusTextBox.Text = "";
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(282, 190);
+            this.Controls.Add(this.statusTextBox);
             this.Controls.Add(this.settingsButton);
             this.Controls.Add(this.helpLabel);
             this.Controls.Add(this.updateTimerLabel);
             this.Controls.Add(this.pendingLabel);
             this.Controls.Add(this.setStatusButton);
             this.Controls.Add(this.setStatusTextBox);
-            this.Controls.Add(this.statusTextBox);
             this.Controls.Add(this.statusLabel);
             this.Controls.Add(this.modeButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -169,7 +172,6 @@
 
         private System.Windows.Forms.Button modeButton;
         private System.Windows.Forms.Label statusLabel;
-        private System.Windows.Forms.TextBox statusTextBox;
         private System.Windows.Forms.Timer checkTimer;
         private System.Windows.Forms.TextBox setStatusTextBox;
         private System.Windows.Forms.Button setStatusButton;
@@ -178,6 +180,7 @@
         private System.Windows.Forms.Label updateTimerLabel;
         private System.Windows.Forms.Label helpLabel;
         private System.Windows.Forms.Button settingsButton;
+        private System.Windows.Forms.RichTextBox statusTextBox;
     }
 }
 
