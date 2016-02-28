@@ -35,7 +35,6 @@
             this.setStatusTextBox = new System.Windows.Forms.TextBox();
             this.setStatusButton = new System.Windows.Forms.Button();
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
-            this.pendingLabel = new System.Windows.Forms.Label();
             this.updateTimerLabel = new System.Windows.Forms.Label();
             this.helpLabel = new System.Windows.Forms.Label();
             this.statusTextBox = new System.Windows.Forms.RichTextBox();
@@ -46,7 +45,7 @@
             // 
             // modeButton
             // 
-            this.modeButton.Location = new System.Drawing.Point(12, 101);
+            this.modeButton.Location = new System.Drawing.Point(12, 84);
             this.modeButton.Name = "modeButton";
             this.modeButton.Size = new System.Drawing.Size(258, 49);
             this.modeButton.TabIndex = 0;
@@ -70,7 +69,7 @@
             // 
             // setStatusTextBox
             // 
-            this.setStatusTextBox.Location = new System.Drawing.Point(12, 156);
+            this.setStatusTextBox.Location = new System.Drawing.Point(12, 139);
             this.setStatusTextBox.Name = "setStatusTextBox";
             this.setStatusTextBox.Size = new System.Drawing.Size(170, 22);
             this.setStatusTextBox.TabIndex = 4;
@@ -78,7 +77,7 @@
             // 
             // setStatusButton
             // 
-            this.setStatusButton.Location = new System.Drawing.Point(188, 155);
+            this.setStatusButton.Location = new System.Drawing.Point(188, 138);
             this.setStatusButton.Name = "setStatusButton";
             this.setStatusButton.Size = new System.Drawing.Size(82, 24);
             this.setStatusButton.TabIndex = 5;
@@ -90,17 +89,6 @@
             // 
             this.updateTimer.Tick += new System.EventHandler(this.updateTimer_Tick);
             // 
-            // pendingLabel
-            // 
-            this.pendingLabel.AutoSize = true;
-            this.pendingLabel.Cursor = System.Windows.Forms.Cursors.Help;
-            this.pendingLabel.Location = new System.Drawing.Point(12, 71);
-            this.pendingLabel.Name = "pendingLabel";
-            this.pendingLabel.Size = new System.Drawing.Size(171, 17);
-            this.pendingLabel.TabIndex = 7;
-            this.pendingLabel.Text = "No pending status update";
-            this.pendingLabel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.updateLabel_MouseClick);
-            // 
             // updateTimerLabel
             // 
             this.updateTimerLabel.AutoSize = true;
@@ -110,7 +98,6 @@
             this.updateTimerLabel.Size = new System.Drawing.Size(152, 17);
             this.updateTimerLabel.TabIndex = 8;
             this.updateTimerLabel.Text = "Status update possible";
-            this.updateTimerLabel.ForeColorChanged += new System.EventHandler(this.updateTimerLabel_ForeColorChanged);
             this.updateTimerLabel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.updateLabel_MouseClick);
             // 
             // helpLabel
@@ -141,7 +128,7 @@
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.usernameLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 186);
+            this.statusStrip.Location = new System.Drawing.Point(0, 174);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(282, 25);
             this.statusStrip.SizingGrip = false;
@@ -157,12 +144,11 @@
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(282, 211);
+            this.ClientSize = new System.Drawing.Size(282, 199);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.statusTextBox);
             this.Controls.Add(this.helpLabel);
             this.Controls.Add(this.updateTimerLabel);
-            this.Controls.Add(this.pendingLabel);
             this.Controls.Add(this.setStatusButton);
             this.Controls.Add(this.setStatusTextBox);
             this.Controls.Add(this.statusLabel);
@@ -189,7 +175,6 @@
         private System.Windows.Forms.TextBox setStatusTextBox;
         private System.Windows.Forms.Button setStatusButton;
         private System.Windows.Forms.Timer updateTimer;
-        private System.Windows.Forms.Label pendingLabel;
         private System.Windows.Forms.Label updateTimerLabel;
         private System.Windows.Forms.Label helpLabel;
         private System.Windows.Forms.RichTextBox statusTextBox;

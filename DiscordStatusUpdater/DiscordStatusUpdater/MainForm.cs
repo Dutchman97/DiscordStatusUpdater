@@ -23,8 +23,9 @@ namespace DiscordStatusUpdater
             checkTimer.Interval = 1;
             checkTimer.Start();
             updateTimer.Stop();
-            updateTimerLabel.ForeColor = System.Drawing.Color.Green;
             updateTimerLabel.Text = "Status update possible";
+            updateTimerLabel.ForeColor = System.Drawing.Color.Green;
+            SetHelpLabel();
             usernameLabel.Text = "Logged in as " + client.CurrentUser.Name;
         }
 
@@ -109,10 +110,15 @@ namespace DiscordStatusUpdater
             {
                 Console.WriteLine("Update timer enabled");
                 pendingStatus = status;
+
                 if (status == string.Empty)
-                    pendingLabel.Text = "Pending status removal";
+                    updateTimerLabel.Text = "Pending status removal";
                 else
-                    pendingLabel.Text = "Pending status update: " + status;
+                    updateTimerLabel.Text = "Pending status update: " + status;
+
+                updateTimerLabel.ForeColor = System.Drawing.Color.Red;
+
+                SetHelpLabel();
             }
             else
             {
@@ -121,12 +127,13 @@ namespace DiscordStatusUpdater
                 updateTimer.Interval = UPDATEINTERVAL;
                 updateTimer.Start();
                 updateTimerLabel.Text = "No status update possible yet";
-                updateTimerLabel.ForeColor = System.Drawing.Color.Red;
+                updateTimerLabel.ForeColor = System.Drawing.Color.FromArgb(0xFF, 0xCC, 0x84, 0x00);
+                SetHelpLabel();
                 
                 if (status == string.Empty)
                     statusTextBox.Text = "";
                 else
-                    statusTextBox.Rtf = @"{\rtf1\ansi {\colortbl;\red0\green0\blue0;}\cf0 " + PLAYINGTEXT + @"\b\cf0 " + status + @"\b0 }";
+                    statusTextBox.Rtf = @"{\rtf1\ansi {\colortbl;\red0\green0\blue0;}\cf1 " + PLAYINGTEXT + @"\b\cf0 " + status + @"\b0 }";
 
                 client.SetGame(status);
             }
@@ -148,6 +155,11 @@ namespace DiscordStatusUpdater
                 checkTimer.Interval = 1;
                 checkTimer.Start();
             }
+        }
+
+        private void SetHelpLabel()
+        {
+            helpLabel.Location = new System.Drawing.Point(updateTimerLabel.Location.X + updateTimerLabel.Size.Width - 3, updateTimerLabel.Location.Y + 1);
         }
 
         private void modeButton_Click(object sender, EventArgs e)
@@ -204,12 +216,12 @@ namespace DiscordStatusUpdater
             Console.WriteLine("Update timer ticked");
             updateTimerLabel.Text = "Status update possible";
             updateTimerLabel.ForeColor = System.Drawing.Color.Green;
+            SetHelpLabel();
             updateTimer.Stop();
 
             if (pendingStatus != null)
                 ChangeStatus(pendingStatus);
-
-            pendingLabel.Text = "No pending status update";
+            
             pendingStatus = null;
         }
 
@@ -218,11 +230,6 @@ namespace DiscordStatusUpdater
             MessageBox.Show("Discord only allows status updates every roughly 10 seconds.\n" +
                 "Any status update less than 10 seconds after another status update will be pushed after the 10 seconds are over.",
                 "Update speed limit", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
-        }
-
-        private void updateTimerLabel_ForeColorChanged(object sender, EventArgs e)
-        {
-            helpLabel.Location = new System.Drawing.Point(updateTimerLabel.Location.X + updateTimerLabel.Size.Width - 2, updateTimerLabel.Location.Y);
         }
 
         private void setStatusTextBox_KeyDown(object sender, KeyEventArgs e)
