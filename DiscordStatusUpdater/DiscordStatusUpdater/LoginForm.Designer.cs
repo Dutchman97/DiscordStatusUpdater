@@ -104,7 +104,7 @@
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Name = "LoginForm";
-            this.Text = "Login";
+            this.Text = "DiscordStatusUpdater";
             this.ResumeLayout(false);
             this.PerformLayout();
 

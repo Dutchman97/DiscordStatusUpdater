@@ -38,15 +38,17 @@
             this.pendingLabel = new System.Windows.Forms.Label();
             this.updateTimerLabel = new System.Windows.Forms.Label();
             this.helpLabel = new System.Windows.Forms.Label();
-            this.settingsButton = new System.Windows.Forms.Button();
             this.statusTextBox = new System.Windows.Forms.RichTextBox();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.usernameLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // modeButton
             // 
             this.modeButton.Location = new System.Drawing.Point(12, 101);
             this.modeButton.Name = "modeButton";
-            this.modeButton.Size = new System.Drawing.Size(170, 49);
+            this.modeButton.Size = new System.Drawing.Size(258, 49);
             this.modeButton.TabIndex = 0;
             this.modeButton.Text = "Click to change mode\r\nCurrently automatic";
             this.modeButton.UseVisualStyleBackColor = true;
@@ -123,15 +125,6 @@
             this.helpLabel.Text = "(?)";
             this.helpLabel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.updateLabel_MouseClick);
             // 
-            // settingsButton
-            // 
-            this.settingsButton.Location = new System.Drawing.Point(188, 101);
-            this.settingsButton.Name = "settingsButton";
-            this.settingsButton.Size = new System.Drawing.Size(82, 49);
-            this.settingsButton.TabIndex = 10;
-            this.settingsButton.Text = "Settings";
-            this.settingsButton.UseVisualStyleBackColor = true;
-            // 
             // statusTextBox
             // 
             this.statusTextBox.Enabled = false;
@@ -143,12 +136,30 @@
             this.statusTextBox.TabIndex = 11;
             this.statusTextBox.Text = "";
             // 
+            // statusStrip
+            // 
+            this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.usernameLabel});
+            this.statusStrip.Location = new System.Drawing.Point(0, 186);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(282, 25);
+            this.statusStrip.SizingGrip = false;
+            this.statusStrip.TabIndex = 12;
+            this.statusStrip.Text = "statusStrip1";
+            // 
+            // usernameLabel
+            // 
+            this.usernameLabel.Name = "usernameLabel";
+            this.usernameLabel.Size = new System.Drawing.Size(151, 20);
+            this.usernameLabel.Text = "toolStripStatusLabel1";
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(282, 190);
+            this.ClientSize = new System.Drawing.Size(282, 211);
+            this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.statusTextBox);
-            this.Controls.Add(this.settingsButton);
             this.Controls.Add(this.helpLabel);
             this.Controls.Add(this.updateTimerLabel);
             this.Controls.Add(this.pendingLabel);
@@ -163,6 +174,8 @@
             this.Text = "DiscordStatusUpdater";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -179,8 +192,9 @@
         private System.Windows.Forms.Label pendingLabel;
         private System.Windows.Forms.Label updateTimerLabel;
         private System.Windows.Forms.Label helpLabel;
-        private System.Windows.Forms.Button settingsButton;
         private System.Windows.Forms.RichTextBox statusTextBox;
+        private System.Windows.Forms.StatusStrip statusStrip;
+        private System.Windows.Forms.ToolStripStatusLabel usernameLabel;
     }
 }
 

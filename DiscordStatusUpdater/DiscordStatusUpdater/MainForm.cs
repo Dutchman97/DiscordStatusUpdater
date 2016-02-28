@@ -13,7 +13,7 @@ namespace DiscordStatusUpdater
         // The String class instead of the string struct, because now 'null' can represent no status change
         String pendingStatus = null;
         const int CHECKINTERVAL = 10000, UPDATEINTERVAL = 10000;
-        const string PLAYINGTEXT = "Playing ";
+        const string PLAYINGTEXT = " Playing ";
 
         public MainForm(DiscordClient client)
         {
@@ -25,6 +25,7 @@ namespace DiscordStatusUpdater
             updateTimer.Stop();
             updateTimerLabel.ForeColor = System.Drawing.Color.Green;
             updateTimerLabel.Text = "Status update possible";
+            usernameLabel.Text = "Logged in as " + client.CurrentUser.Name;
         }
 
         private string GetVideoTitle()
@@ -125,7 +126,7 @@ namespace DiscordStatusUpdater
                 if (status == string.Empty)
                     statusTextBox.Text = "";
                 else
-                    statusTextBox.Rtf = @"{\rtf1\ansi {\colortbl;\red0\green0\blue0;}\cf1" + PLAYINGTEXT + @"\b\cf0 " + status + @"\b0 }";
+                    statusTextBox.Rtf = @"{\rtf1\ansi {\colortbl;\red0\green0\blue0;}\cf0 " + PLAYINGTEXT + @"\b\cf0 " + status + @"\b0 }";
 
                 client.SetGame(status);
             }

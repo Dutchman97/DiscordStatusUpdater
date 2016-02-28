@@ -8,6 +8,8 @@ namespace DiscordStatusUpdater
     public partial class LoginForm : Form
     {
         bool pressed = false;
+        bool loggedIn = false;
+        const int TIMEOUT = 10;
 
         public LoginForm()
         {
@@ -39,13 +41,13 @@ namespace DiscordStatusUpdater
             {
                 textBox1.Enabled = false;
                 textBox2.Enabled = false;
+                this.Text = "Logging in...";
+
+                client.LoggedIn += (sender1, e1) => loggedIn = true;
                 client.Connect(textBox1.Text, textBox2.Text);
 
                 if (client.State == ConnectionState.Connected || client.State == ConnectionState.Connecting)
                 {
-                    // The best way to wait of course
-                    while (client.State == ConnectionState.Connecting) System.Threading.Thread.Sleep(10);
-
                     if (!checkBox1.Checked)
                     {
                         textBox1.Text = "";
@@ -56,7 +58,19 @@ namespace DiscordStatusUpdater
                     Properties.Settings.Default.Remember = checkBox1.Checked;
                     Properties.Settings.Default.Save();
 
-                    textBox2.Text = "";
+                    // The best way to wait of course
+                    DateTime start = DateTime.Now;
+                    while (!loggedIn)
+                    {
+                        System.Threading.Thread.Sleep(5);
+
+                        var delta = DateTime.Now - start;
+                        if (delta >= TimeSpan.FromSeconds(TIMEOUT))
+                            throw new TimeoutException("Login timed out");
+                        else if (delta <= TimeSpan.Zero)
+                            throw new Exception("Time changed error");
+                    }
+
                     this.Hide();
                     MainForm main = new MainForm(client);
                     main.Owner = this;
@@ -70,8 +84,11 @@ namespace DiscordStatusUpdater
             }
             catch (Exception)
             {
+                client.Dispose();
+                client = null;
                 textBox1.Enabled = true;
                 textBox2.Enabled = true;
+                this.Text = "DiscordStatusUpdater";
                 MessageBox.Show("Your email and/or password is incorrect", "Failed to login", MessageBoxButtons.OK);
             }
         }
