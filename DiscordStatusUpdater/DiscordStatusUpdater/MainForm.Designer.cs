@@ -40,6 +40,7 @@
             this.statusTextBox = new System.Windows.Forms.RichTextBox();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.usernameLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.settingsButton = new System.Windows.Forms.Button();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,7 +48,7 @@
             // 
             this.modeButton.Location = new System.Drawing.Point(12, 84);
             this.modeButton.Name = "modeButton";
-            this.modeButton.Size = new System.Drawing.Size(258, 49);
+            this.modeButton.Size = new System.Drawing.Size(170, 49);
             this.modeButton.TabIndex = 0;
             this.modeButton.Text = "Click to change mode\r\nCurrently automatic";
             this.modeButton.UseVisualStyleBackColor = true;
@@ -141,10 +142,20 @@
             this.usernameLabel.Size = new System.Drawing.Size(151, 20);
             this.usernameLabel.Text = "toolStripStatusLabel1";
             // 
+            // settingsButton
+            // 
+            this.settingsButton.Location = new System.Drawing.Point(188, 84);
+            this.settingsButton.Name = "settingsButton";
+            this.settingsButton.Size = new System.Drawing.Size(82, 48);
+            this.settingsButton.TabIndex = 13;
+            this.settingsButton.Text = "Settings";
+            this.settingsButton.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(282, 199);
+            this.Controls.Add(this.settingsButton);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.statusTextBox);
             this.Controls.Add(this.helpLabel);
@@ -180,6 +191,7 @@
         private System.Windows.Forms.RichTextBox statusTextBox;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel usernameLabel;
+        private System.Windows.Forms.Button settingsButton;
     }
 }
 
