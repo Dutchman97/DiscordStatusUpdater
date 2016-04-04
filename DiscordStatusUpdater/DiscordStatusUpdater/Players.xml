@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<players>
+	<player name="VLC">
+		<filename>vlc</filename>
+		<titleprefix />
+		<titlesuffix> - VLC media player</titlesuffix>
+	</player>
+	<player name="MPC-HC">
+		<filename>mpc-hc</filename>
+		<titleprefix />
+		<titlesuffix />
+	</player>
+	<player name="MPC-BE">
+		<filename>mpc-be</filename>
+		<titleprefix />
+		<titlesuffix> - MPC-BE</titlesuffix>
+	</player>
+</players>

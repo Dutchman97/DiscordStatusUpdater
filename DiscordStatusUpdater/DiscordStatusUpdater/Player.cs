@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml;
 
 namespace DiscordStatusUpdater
 {
@@ -14,6 +15,19 @@ namespace DiscordStatusUpdater
         {
             Name = name; FileName = fileName;
             TitlePrefix = titlePrefix; TitleSuffix = titleSuffix;
+        }
+
+        public Player(XmlNode player)
+        {
+            Name = player.Attributes["name"].Value;
+            FileName = player["filename"].InnerText;
+            TitlePrefix = player["titleprefix"].InnerText;
+            TitleSuffix = player["titlesuffix"].InnerText;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} [{1}]: \"{2}abcd.mkv{3}\"", new string[] { Name, FileName, TitlePrefix, TitleSuffix });
         }
     }
 }

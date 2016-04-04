@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 using Discord;
@@ -18,8 +19,29 @@ namespace DiscordStatusUpdater
             textBox1.Text = Properties.Settings.Default.Email;
             textBox2.Text = Properties.Settings.Default.Password;
             checkBox1.Checked = Properties.Settings.Default.Remember;
+            Properties.Settings.Default.Save();
 
-            Player[] players = new Player[] {
+            LoadPlayers();
+        }
+
+        private void LoadPlayers()
+        {
+            //FileStream fileStream = new FileStream("Players.xml", FileMode.Open);
+            //XmlReader xmlReader = XmlReader.Create(fileStream);
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.Load("Players.xml");
+            XmlNodeList xmlPlayers = xmlDocument.GetElementsByTagName("player");
+
+            //Player[] players = new Player[xmlPlayers.Count];
+            Properties.Settings.Default.Players.Clear();
+            for (int i = 0; i < xmlPlayers.Count; i++)
+            {
+                Player player = new Player(xmlPlayers[i]);
+                Properties.Settings.Default.Players.Add(player);
+                Console.WriteLine("Added player " + player.ToString());
+            }
+
+            /*Player[] players = new Player[] {
                 new Player("VLC", "vlc", "", " - VLC media player"),
                 new Player("MPC-HC", "mpc-hc", "", ""),
                 new Player("MPC-BE", "mpc-be", "", " - MPC-BE")
@@ -27,7 +49,7 @@ namespace DiscordStatusUpdater
 
             foreach (Player p in players)
                 if (!Properties.Settings.Default.Players.Contains(p))
-                    Properties.Settings.Default.Players.Add(p);
+                    Properties.Settings.Default.Players.Add(p);*/
 
             string[] extensions = new string[] { "mkv", "mp4", "avi" };
             Properties.Settings.Default.Extensions = new ArrayList(extensions);
