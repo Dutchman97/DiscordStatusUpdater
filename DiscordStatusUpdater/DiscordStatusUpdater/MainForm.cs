@@ -27,6 +27,11 @@ namespace DiscordStatusUpdater
             updateTimerLabel.ForeColor = System.Drawing.Color.Green;
             SetHelpLabel();
             usernameLabel.Text = "Logged in as " + client.CurrentUser.Name;
+
+            // Hide settings button for now
+            settingsButton.Visible = false;
+            settingsButton.Enabled = false;
+            modeButton.Width = settingsButton.Location.X + settingsButton.Width - modeButton.Location.X;
         }
 
         private string GetVideoTitle()

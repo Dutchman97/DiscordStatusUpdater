@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Windows.Forms;
+using System.Xml;
 using Discord;
 
 namespace DiscordStatusUpdater
@@ -37,6 +38,7 @@ namespace DiscordStatusUpdater
         private void button1_Click(object sender, EventArgs e)
         {
             DiscordClient client = new DiscordClient();
+            MainForm main;
             try
             {
                 textBox1.Enabled = false;
@@ -66,30 +68,30 @@ namespace DiscordStatusUpdater
 
                         var delta = DateTime.Now - start;
                         if (delta >= TimeSpan.FromSeconds(TIMEOUT))
-                            throw new TimeoutException("Login timed out");
+                            throw new TimeoutException("Login timed out. Either the email/password provided is incorrect or the program can not connect to Discord.");
                         else if (delta <= TimeSpan.Zero)
-                            throw new Exception("Time changed error");
+                            throw new Exception("The time on this computer was changed.");
                     }
 
                     this.Hide();
-                    MainForm main = new MainForm(client);
+                    main = new MainForm(client);
                     main.Owner = this;
                     main.Show();
                 }
                 else
                 {
-                    MessageBox.Show("Login failed. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                    throw new Exception("Login failed");
+                    throw new Exception("Login failed.");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 client.Dispose();
                 client = null;
                 textBox1.Enabled = true;
                 textBox2.Enabled = true;
+                main = null;
                 this.Text = "DiscordStatusUpdater";
-                MessageBox.Show("Your email and/or password is incorrect", "Failed to login", MessageBoxButtons.OK);
+                MessageBox.Show(ex.Message, "Failed to login", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
             }
         }
 
