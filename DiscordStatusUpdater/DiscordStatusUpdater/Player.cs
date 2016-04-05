@@ -27,7 +27,7 @@ namespace DiscordStatusUpdater
 
         public override string ToString()
         {
-            return string.Format("{0} [{1}]: \"{2}abcd.mkv{3}\"", new string[] { Name, FileName, TitlePrefix, TitleSuffix });
+            return string.Format("{0} [{1}.exe]: \"{2}abcd.mkv{3}\"", new string[] { Name, FileName, TitlePrefix, TitleSuffix });
         }
     }
 }

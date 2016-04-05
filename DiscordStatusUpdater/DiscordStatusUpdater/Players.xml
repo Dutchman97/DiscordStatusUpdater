@@ -15,4 +15,9 @@
 		<titleprefix />
 		<titlesuffix> - MPC-BE</titlesuffix>
 	</player>
+  <player name="PotPlayer (64-bit)">
+    <filename>PotPlayerMini64</filename>
+    <titleprefix />
+    <titlesuffix> - PotPlayer</titlesuffix>
+  </player>
 </players>
