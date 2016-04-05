@@ -26,13 +26,10 @@ namespace DiscordStatusUpdater
 
         private void LoadPlayers()
         {
-            //FileStream fileStream = new FileStream("Players.xml", FileMode.Open);
-            //XmlReader xmlReader = XmlReader.Create(fileStream);
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load("Players.xml");
             XmlNodeList xmlPlayers = xmlDocument.GetElementsByTagName("player");
-
-            //Player[] players = new Player[xmlPlayers.Count];
+            
             Properties.Settings.Default.Players.Clear();
             for (int i = 0; i < xmlPlayers.Count; i++)
             {
@@ -40,16 +37,6 @@ namespace DiscordStatusUpdater
                 Properties.Settings.Default.Players.Add(player);
                 Console.WriteLine("Added player " + player.ToString());
             }
-
-            /*Player[] players = new Player[] {
-                new Player("VLC", "vlc", "", " - VLC media player"),
-                new Player("MPC-HC", "mpc-hc", "", ""),
-                new Player("MPC-BE", "mpc-be", "", " - MPC-BE")
-            };
-
-            foreach (Player p in players)
-                if (!Properties.Settings.Default.Players.Contains(p))
-                    Properties.Settings.Default.Players.Add(p);*/
 
             string[] extensions = new string[] { "mkv", "mp4", "avi" };
             Properties.Settings.Default.Extensions = new ArrayList(extensions);

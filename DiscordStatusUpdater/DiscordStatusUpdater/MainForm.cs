@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using Discord;
@@ -8,6 +9,7 @@ namespace DiscordStatusUpdater
 {
     public partial class MainForm : Form
     {
+        SettingsForm settingsForm;
         DiscordClient client;
         bool manual = false;
         // The String class instead of the string struct, because now 'null' can represent no status change
@@ -27,11 +29,7 @@ namespace DiscordStatusUpdater
             updateTimerLabel.ForeColor = System.Drawing.Color.Green;
             SetHelpLabel();
             usernameLabel.Text = "Logged in as " + client.CurrentUser.Name;
-
-            // Hide settings button for now
-            settingsButton.Visible = false;
-            settingsButton.Enabled = false;
-            modeButton.Width = settingsButton.Location.X + settingsButton.Width - modeButton.Location.X;
+            Console.WriteLine(usernameLabel.Text);
         }
 
         private string GetVideoTitle()
@@ -164,7 +162,7 @@ namespace DiscordStatusUpdater
 
         private void SetHelpLabel()
         {
-            helpLabel.Location = new System.Drawing.Point(updateTimerLabel.Location.X + updateTimerLabel.Size.Width - 3, updateTimerLabel.Location.Y + 1);
+            helpLabel.Location = new Point(updateTimerLabel.Location.X + updateTimerLabel.Size.Width - 3, updateTimerLabel.Location.Y + 1);
         }
 
         private void modeButton_Click(object sender, EventArgs e)
@@ -235,6 +233,32 @@ namespace DiscordStatusUpdater
             MessageBox.Show("Discord only allows status updates every roughly 10 seconds.\n" +
                 "Any status update less than 10 seconds after another status update will be pushed after the 10 seconds are over.",
                 "Update speed limit", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+        }
+
+        private void settingsButton_Click(object sender, EventArgs e)
+        {
+            if (settingsForm == null)
+            {
+                settingsForm = new SettingsForm();
+                settingsForm.StartPosition = FormStartPosition.Manual;
+                //settingsForm.Size = new Size(282, 253);
+            }
+
+            if (settingsForm.Visible)
+            {
+                settingsForm.Hide();
+            }
+            else
+            {
+                settingsForm.Show(this);
+                MainForm_Move(sender, e);
+            }
+        }
+
+        private void MainForm_Move(object sender, EventArgs e)
+        {
+            if (settingsForm != null)
+                settingsForm.Location = new Point(this.DesktopLocation.X + this.Width - 15, this.DesktopLocation.Y);
         }
 
         private void setStatusTextBox_KeyDown(object sender, KeyEventArgs e)

@@ -148,8 +148,9 @@
             this.settingsButton.Name = "settingsButton";
             this.settingsButton.Size = new System.Drawing.Size(82, 48);
             this.settingsButton.TabIndex = 13;
-            this.settingsButton.Text = "Settings";
+            this.settingsButton.Text = "Configure players";
             this.settingsButton.UseVisualStyleBackColor = true;
+            this.settingsButton.Click += new System.EventHandler(this.settingsButton_Click);
             // 
             // MainForm
             // 
@@ -171,6 +172,7 @@
             this.Text = "DiscordStatusUpdater";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
+            this.Move += new System.EventHandler(this.MainForm_Move);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
