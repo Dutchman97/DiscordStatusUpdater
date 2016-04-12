@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.applyButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.playerList = new System.Windows.Forms.ComboBox();
@@ -38,10 +39,12 @@
             this.previewTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.nameTextBox = new System.Windows.Forms.TextBox();
             this.deleteButton = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.videoPlayerTitleLabel = new System.Windows.Forms.Label();
+            this.helpLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // applyButton
@@ -139,15 +142,6 @@
             this.label3.TabIndex = 9;
             this.label3.Text = "Title suffix";
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 157);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(139, 17);
-            this.label4.TabIndex = 10;
-            this.label4.Text = "Window title example";
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -174,16 +168,38 @@
             this.deleteButton.UseVisualStyleBackColor = true;
             this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
             // 
+            // videoPlayerTitleLabel
+            // 
+            this.videoPlayerTitleLabel.AutoSize = true;
+            this.videoPlayerTitleLabel.Cursor = System.Windows.Forms.Cursors.Help;
+            this.videoPlayerTitleLabel.Location = new System.Drawing.Point(12, 157);
+            this.videoPlayerTitleLabel.Name = "videoPlayerTitleLabel";
+            this.videoPlayerTitleLabel.Size = new System.Drawing.Size(113, 17);
+            this.videoPlayerTitleLabel.TabIndex = 14;
+            this.videoPlayerTitleLabel.Text = "Video player title";
+            // 
+            // helpLabel
+            // 
+            this.helpLabel.AutoSize = true;
+            this.helpLabel.Cursor = System.Windows.Forms.Cursors.Help;
+            this.helpLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.helpLabel.Location = new System.Drawing.Point(192, 157);
+            this.helpLabel.Name = "helpLabel";
+            this.helpLabel.Size = new System.Drawing.Size(16, 12);
+            this.helpLabel.TabIndex = 15;
+            this.helpLabel.Text = "(?)";
+            // 
             // SettingsForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(282, 253);
             this.ControlBox = false;
+            this.Controls.Add(this.helpLabel);
+            this.Controls.Add(this.videoPlayerTitleLabel);
             this.Controls.Add(this.deleteButton);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.nameTextBox);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.previewTextBox);
@@ -198,6 +214,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SettingsForm";
+            this.ShowInTaskbar = false;
             this.Text = "Configure video players";
             this.Move += new System.EventHandler(this.SettingsForm_Move);
             this.ResumeLayout(false);
@@ -217,9 +234,11 @@
         private System.Windows.Forms.TextBox previewTextBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox nameTextBox;
         private System.Windows.Forms.Button deleteButton;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Label videoPlayerTitleLabel;
+        private System.Windows.Forms.Label helpLabel;
     }
 }

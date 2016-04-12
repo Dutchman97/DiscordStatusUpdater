@@ -10,7 +10,9 @@ namespace DiscordStatusUpdater
         public SettingsForm()
         {
             InitializeComponent();
+            this.Size = new Size(300, 303);
             Reset();
+            helpLabel.Location = new Point(videoPlayerTitleLabel.Location.X + videoPlayerTitleLabel.Size.Width - 3, videoPlayerTitleLabel.Location.Y + 1);
         }
 
         public void Reset()
@@ -49,7 +51,7 @@ namespace DiscordStatusUpdater
 
         private void UpdatePreviewTextBox()
         {
-            previewTextBox.Text = titlePrefixTextBox.Text + "[Example] video.mkv" + titleSuffixTextBox.Text;
+            previewTextBox.Text = titlePrefixTextBox.Text + "Example_video.mkv" + titleSuffixTextBox.Text;
         }
 
         private void titleTextBox_TextChanged(object sender, EventArgs e)

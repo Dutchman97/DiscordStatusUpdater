@@ -41,6 +41,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.usernameLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.settingsButton = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -99,19 +100,23 @@
             this.updateTimerLabel.Size = new System.Drawing.Size(152, 17);
             this.updateTimerLabel.TabIndex = 8;
             this.updateTimerLabel.Text = "Status update possible";
-            this.updateTimerLabel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.updateLabel_MouseClick);
+            this.toolTip1.SetToolTip(this.updateTimerLabel, "Discord only allows status updates every roughly 10 seconds.\r\nAny status update l" +
+        "ess than 10 seconds after another status update will be pushed after the 10 seco" +
+        "nds are over.");
             // 
             // helpLabel
             // 
             this.helpLabel.AutoSize = true;
             this.helpLabel.Cursor = System.Windows.Forms.Cursors.Help;
-            this.helpLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 4.4F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.helpLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.helpLabel.Location = new System.Drawing.Point(170, 54);
             this.helpLabel.Name = "helpLabel";
-            this.helpLabel.Size = new System.Drawing.Size(15, 9);
+            this.helpLabel.Size = new System.Drawing.Size(16, 12);
             this.helpLabel.TabIndex = 9;
             this.helpLabel.Text = "(?)";
-            this.helpLabel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.updateLabel_MouseClick);
+            this.toolTip1.SetToolTip(this.helpLabel, "Discord only allows status updates every roughly 10 seconds.\r\nAny status update l" +
+        "ess than 10 seconds after another status update will be pushed after the 10 seco" +
+        "nds are over.");
             // 
             // statusTextBox
             // 
@@ -151,6 +156,12 @@
             this.settingsButton.Text = "Configure players";
             this.settingsButton.UseVisualStyleBackColor = true;
             this.settingsButton.Click += new System.EventHandler(this.settingsButton_Click);
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.AutoPopDelay = 15000;
+            this.toolTip1.InitialDelay = 500;
+            this.toolTip1.ReshowDelay = 100;
             // 
             // MainForm
             // 
@@ -194,6 +205,7 @@
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel usernameLabel;
         private System.Windows.Forms.Button settingsButton;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 

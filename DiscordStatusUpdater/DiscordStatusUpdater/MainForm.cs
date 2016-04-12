@@ -228,20 +228,12 @@ namespace DiscordStatusUpdater
             pendingStatus = null;
         }
 
-        private void updateLabel_MouseClick(object sender, MouseEventArgs e)
-        {
-            MessageBox.Show("Discord only allows status updates every roughly 10 seconds.\n" +
-                "Any status update less than 10 seconds after another status update will be pushed after the 10 seconds are over.",
-                "Update speed limit", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
-        }
-
         private void settingsButton_Click(object sender, EventArgs e)
         {
             if (settingsForm == null)
             {
                 settingsForm = new SettingsForm();
                 settingsForm.StartPosition = FormStartPosition.Manual;
-                //settingsForm.Size = new Size(282, 253);
             }
 
             if (settingsForm.Visible)
@@ -250,8 +242,8 @@ namespace DiscordStatusUpdater
             }
             else
             {
-                settingsForm.Show(this);
                 MainForm_Move(sender, e);
+                settingsForm.Show(this);
             }
         }
 
