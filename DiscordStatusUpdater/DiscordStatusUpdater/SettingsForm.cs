@@ -64,6 +64,7 @@ namespace DiscordStatusUpdater
             nameTextBox.Text = nameTextBox.Text.Trim();
             fileNameTextBox.Text = fileNameTextBox.Text.Trim();
 
+            // If the video player has no name, color the relevant text box red and return
             if (nameTextBox.Text == string.Empty)
             {
                 nameTextBox.BackColor = Color.Salmon;
@@ -72,6 +73,7 @@ namespace DiscordStatusUpdater
             else
                 nameTextBox.BackColor = Color.White;
 
+            // If the video player has no file name, color the relevant text box red and return
             if (fileNameTextBox.Text == string.Empty)
             {
                 fileNameTextBox.BackColor = Color.Salmon;
@@ -80,6 +82,7 @@ namespace DiscordStatusUpdater
             else
                 fileNameTextBox.BackColor = Color.White;
 
+            // Remove .exe from the file name if possible
             if (fileNameTextBox.Text.Contains(".exe"))
                 fileNameTextBox.Text = fileNameTextBox.Text.Replace(".exe", string.Empty);
 
@@ -89,6 +92,8 @@ namespace DiscordStatusUpdater
 
             if (playerList.SelectedItem is Player)
             {
+                // If an existing player is being modified:
+
                 Properties.Settings.Default.Players[playerList.SelectedIndex] = player;
 
                 XmlNodeList xmlPlayers = xmlDocument.GetElementsByTagName("player");
@@ -101,6 +106,8 @@ namespace DiscordStatusUpdater
             }
             else
             {
+                // If a new player is being added:
+
                 Properties.Settings.Default.Players.Add(player);
 
                 XmlElement xmlPlayer = xmlDocument.CreateElement("player");

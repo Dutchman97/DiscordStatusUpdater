@@ -196,8 +196,9 @@ namespace DiscordStatusUpdater
             if (statusTextBox.Text != string.Empty)
             {
                 client.SetGame(string.Empty);
+                statusTextBox.Text = string.Empty;
 
-                // Yes, a Thread.Sleep() since appearantly calling SetGame() does not wait for the new status to get sent.
+                // Yes, a Thread.Sleep() since appearantly calling client.SetGame() does not wait for the new status to get sent.
                 Thread.Sleep(300);
             }
 

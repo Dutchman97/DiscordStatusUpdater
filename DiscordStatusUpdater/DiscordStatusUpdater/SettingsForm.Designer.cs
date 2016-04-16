@@ -177,6 +177,8 @@
             this.videoPlayerTitleLabel.Size = new System.Drawing.Size(113, 17);
             this.videoPlayerTitleLabel.TabIndex = 14;
             this.videoPlayerTitleLabel.Text = "Video player title";
+            this.toolTip1.SetToolTip(this.videoPlayerTitleLabel, "This is what the title on your video player should look like when playing a video" +
+        " called \"Example_video.mkv\"");
             // 
             // helpLabel
             // 
@@ -188,6 +190,8 @@
             this.helpLabel.Size = new System.Drawing.Size(16, 12);
             this.helpLabel.TabIndex = 15;
             this.helpLabel.Text = "(?)";
+            this.toolTip1.SetToolTip(this.helpLabel, "This is what the title on your video player should look like when playing a video" +
+        " called \"Example_video.mkv\"");
             // 
             // SettingsForm
             // 
