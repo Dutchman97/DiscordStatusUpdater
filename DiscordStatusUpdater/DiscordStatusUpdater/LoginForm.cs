@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 using Discord;
@@ -46,10 +45,9 @@ namespace DiscordStatusUpdater
 
         private void button1_Click(object sender, EventArgs e)
         {
-            DiscordClient client = new DiscordClient();
-            MainForm main;
             try
             {
+                DiscordClient client = new DiscordClient();
                 textBox1.Enabled = false;
                 textBox2.Enabled = false;
                 this.Text = "Logging in...";
@@ -82,10 +80,10 @@ namespace DiscordStatusUpdater
                             throw new Exception("The time on this computer was changed.");
                     }
 
-                    this.Hide();
-                    main = new MainForm(client);
+                    MainForm main = new MainForm(client);
                     main.Owner = this;
                     main.Show();
+                    this.Hide();
                 }
                 else
                 {
@@ -94,13 +92,11 @@ namespace DiscordStatusUpdater
             }
             catch (Exception ex)
             {
-                client.Dispose();
-                client = null;
                 textBox1.Enabled = true;
                 textBox2.Enabled = true;
-                main = null;
                 this.Text = "DiscordStatusUpdater";
                 MessageBox.Show(ex.Message, "Failed to login", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                Console.WriteLine(ex.ToString());
             }
         }
 
