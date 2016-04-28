@@ -1,4 +1,4 @@
-# DiscordStatusUpdater (C#)
+# DiscordStatusUpdater
 
 A replacent to my older (and previously private) [Python version of DiscordStatusUpdater](https://my.mixtape.moe/wqpgur.zip).
 
@@ -11,14 +11,13 @@ To use, extract the map DiscordStatusUpdater and start DiscordStatusUpdater.exe.
 ## Features:
 
 * Fancy GUI with login screen
-* Automatically update your status by tracking which video you are watching (with currently only support for MPC-HC, MPC-BE, and VLC)
+* Automatically update your status by tracking which video you are watching
+* Support for VLC, MPC-HC, MPC-BE, and other (user-defined) video players
 * Manually set a custom status
 
 ## Todo:
 
 * Updater
-* Menu bar with settings, help, and about items
-* Add support for tracking other (user-defined) video players
 * Add support for (user-defined) file extensions other than mkv, mp4, and avi files.
-* Add support for user-defined rules for parsing video titles. Maybe. If it isn't too difficult.
+* Add support for user-defined rules for parsing video titles. Maybe. If I know how to.
 * Err, well... What other features does this really need?
