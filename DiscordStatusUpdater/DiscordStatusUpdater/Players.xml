@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<players>
+<players version="1.1">
 	<player name="VLC">
 		<filename>vlc</filename>
 		<titleprefix />
@@ -15,9 +15,14 @@
 		<titleprefix />
 		<titlesuffix> - MPC-BE</titlesuffix>
 	</player>
-  <player name="PotPlayer (64-bit)">
-    <filename>PotPlayerMini64</filename>
-    <titleprefix />
-    <titlesuffix> - PotPlayer</titlesuffix>
-  </player>
+	<player name="PotPlayer (64-bit)">
+		<filename>PotPlayerMini64</filename>
+		<titleprefix />
+		<titlesuffix> - PotPlayer</titlesuffix>
+	</player>
+	<player name="Google Chrome" type="browser">
+		<filename>chrome</filename>
+		<titleprefix />
+		<titlesuffix> - Google Chrome</titlesuffix>
+	</player>
 </players>

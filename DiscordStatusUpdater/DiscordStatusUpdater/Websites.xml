@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<websites version="1.0">
+	<website name="Crunchyroll">
+		<url>crunchyroll.com</url>
+		<titleprefix>Crunchyroll - Watch </titleprefix>
+		<titlesuffix />
+	</website>
+	<website name="Funimation">
+		<url>funimation.com</url>
+		<titleprefix />
+		<titlesuffix />
+	</website>
+</websites>

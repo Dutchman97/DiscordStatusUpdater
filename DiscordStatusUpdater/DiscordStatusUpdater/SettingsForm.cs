@@ -37,8 +37,8 @@ namespace DiscordStatusUpdater
             {
                 nameTextBox.Text = ((Player)playerList.SelectedItem).Name;
                 fileNameTextBox.Text = ((Player)playerList.SelectedItem).FileName;
-                titlePrefixTextBox.Text = ((Player)playerList.SelectedItem).TitlePrefix;
-                titleSuffixTextBox.Text = ((Player)playerList.SelectedItem).TitleSuffix;
+                titlePrefixTextBox.Text = ((Player)playerList.SelectedItem).Title.Prefix;
+                titleSuffixTextBox.Text = ((Player)playerList.SelectedItem).Title.Suffix;
             }
             else
             {
@@ -101,8 +101,8 @@ namespace DiscordStatusUpdater
 
                 xmlPlayer.Attributes["name"].Value = player.Name;
                 xmlPlayer["filename"].InnerText = player.FileName;
-                xmlPlayer["titleprefix"].InnerText = player.TitlePrefix;
-                xmlPlayer["titlesuffix"].InnerText = player.TitleSuffix;
+                xmlPlayer["titleprefix"].InnerText = player.Title.Prefix;
+                xmlPlayer["titlesuffix"].InnerText = player.Title.Suffix;
             }
             else
             {
@@ -121,11 +121,11 @@ namespace DiscordStatusUpdater
                 xmlPlayer.AppendChild(fileName);
 
                 XmlElement titlePrefix = xmlDocument.CreateElement("titleprefix");
-                titlePrefix.InnerText = player.TitlePrefix;
+                titlePrefix.InnerText = player.Title.Prefix;
                 xmlPlayer.AppendChild(titlePrefix);
 
                 XmlElement titleSuffix = xmlDocument.CreateElement("titlesuffix");
-                titleSuffix.InnerText = player.TitleSuffix;
+                titleSuffix.InnerText = player.Title.Suffix;
                 xmlPlayer.AppendChild(titleSuffix);
 
                 xmlDocument["players"].AppendChild(xmlPlayer);
