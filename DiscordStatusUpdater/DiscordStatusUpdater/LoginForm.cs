@@ -28,7 +28,7 @@ namespace DiscordStatusUpdater
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load("Players.xml");
             XmlNodeList xmlPlayers = xmlDocument.GetElementsByTagName("player");
-            
+
             Properties.Settings.Default.Players.Clear();
             for (int i = 0; i < xmlPlayers.Count; i++)
             {
@@ -45,14 +45,14 @@ namespace DiscordStatusUpdater
 
         private void button1_Click(object sender, EventArgs e)
         {
+            DiscordClient client = new DiscordClient();
+
             try
             {
-                DiscordClient client = new DiscordClient();
                 textBox1.Enabled = false;
                 textBox2.Enabled = false;
                 this.Text = "Logging in...";
 
-                client.LoggedIn += (sender1, e1) => loggedIn = true;
                 client.Connect(textBox1.Text, textBox2.Text);
 
                 if (client.State == ConnectionState.Connected || client.State == ConnectionState.Connecting)
@@ -69,7 +69,7 @@ namespace DiscordStatusUpdater
 
                     // The best way to wait of course
                     DateTime start = DateTime.Now;
-                    while (!loggedIn)
+                    while (client.State != ConnectionState.Connected)
                     {
                         System.Threading.Thread.Sleep(5);
 
@@ -97,6 +97,7 @@ namespace DiscordStatusUpdater
                 this.Text = "DiscordStatusUpdater";
                 MessageBox.Show(ex.Message, "Failed to login", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 Console.WriteLine(ex.ToString());
+                client.Dispose();
             }
         }
 
