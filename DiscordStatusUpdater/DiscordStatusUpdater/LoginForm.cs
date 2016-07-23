@@ -9,8 +9,9 @@ namespace DiscordStatusUpdater
     public partial class LoginForm : Form
     {
         bool pressed = false;
-        bool loggedIn = false;
         const int TIMEOUT = 10;
+        const int PLAYER_MAJOR_VERSION = 1, PLAYER_MINOR_VERSION = 1;
+        const int WEBSITE_MAJOR_VERSION = 1, WEBSITE_MINOR_VERSION = 0;
 
         public LoginForm()
         {
@@ -20,13 +21,19 @@ namespace DiscordStatusUpdater
             checkBox1.Checked = Properties.Settings.Default.Remember;
             Properties.Settings.Default.Save();
 
-            LoadPlayers();
+            if (!(LoadPlayers() && LoadWebsites()))
+                Application.Exit();
         }
 
-        private void LoadPlayers()
+        private bool LoadPlayers()
         {
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load("Players.xml");
+
+            // Check version of Players.xml file
+            string version = xmlDocument.ChildNodes[1].Attributes["version"].Value;
+            if (!CheckVersion("Players.xml", version)) return false;
+
             XmlNodeList xmlPlayers = xmlDocument.GetElementsByTagName("player");
 
             Properties.Settings.Default.Players.Clear();
@@ -41,6 +48,62 @@ namespace DiscordStatusUpdater
             Properties.Settings.Default.Extensions = new ArrayList(extensions);
 
             Properties.Settings.Default.Save();
+
+            // Return success
+            return true;
+        }
+
+        private bool LoadWebsites()
+        {
+            return true;
+
+            // |------------|   | | |
+            // | UNFINISHED |   | | |
+            // |------------|   O O O
+
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.Load("Websites.xml");
+
+            // Check version of Websites.xml file
+            string version = xmlDocument.ChildNodes[1].Attributes["version"].Value;
+            if (!CheckVersion("Websites.xml", version)) return false;
+
+            XmlNodeList xmlWebsites = xmlDocument.GetElementsByTagName("website");
+
+            Properties.Settings.Default.Websites.Clear();
+            for (int i = 0; i < xmlWebsites.Count; i++)
+            {
+                
+            }
+        }
+
+        private bool CheckVersion(string name, string version)
+        {
+            if (version == string.Empty) version = "1.0";
+            Console.WriteLine(name + " file: " + version);
+            Console.WriteLine("Supported version: {0}.{1}", PLAYER_MAJOR_VERSION, PLAYER_MINOR_VERSION);
+            string[] versionSplit = version.Split('.');
+            int major_version = int.Parse(versionSplit[0]), minor_version = int.Parse(versionSplit[1]);
+
+            if (PLAYER_MAJOR_VERSION == major_version && PLAYER_MINOR_VERSION < minor_version)
+            {
+                DialogResult result = MessageBox.Show("Warning: this version of the " + name + " file is newer than the version supported. Things may not work correctly. Continue?",
+                    "Unsupported " + name + " file", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (result == DialogResult.No)
+                    // Return failure
+                    return false;
+            }
+            else if (PLAYER_MAJOR_VERSION < major_version)
+            {
+                MessageBox.Show("Warning: this version of the " + name + " file is newer than the version supported.",
+                    "Unsupported " + name + " file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // Return failure
+                return false;
+            }
+
+            return true;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -71,7 +134,7 @@ namespace DiscordStatusUpdater
                     DateTime start = DateTime.Now;
                     while (client.State != ConnectionState.Connected)
                     {
-                        System.Threading.Thread.Sleep(5);
+                        System.Threading.Thread.Sleep(10);
 
                         var delta = DateTime.Now - start;
                         if (delta >= TimeSpan.FromSeconds(TIMEOUT))

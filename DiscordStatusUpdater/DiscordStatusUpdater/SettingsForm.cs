@@ -86,7 +86,7 @@ namespace DiscordStatusUpdater
             if (fileNameTextBox.Text.Contains(".exe"))
                 fileNameTextBox.Text = fileNameTextBox.Text.Replace(".exe", string.Empty);
 
-            Player player = new Player(nameTextBox.Text, fileNameTextBox.Text, titlePrefixTextBox.Text, titleSuffixTextBox.Text);
+            Player player = new Player(nameTextBox.Text, fileNameTextBox.Text, titlePrefixTextBox.Text, titleSuffixTextBox.Text, PlayerType.Player);
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load("Players.xml");
 
@@ -103,6 +103,7 @@ namespace DiscordStatusUpdater
                 xmlPlayer["filename"].InnerText = player.FileName;
                 xmlPlayer["titleprefix"].InnerText = player.Title.Prefix;
                 xmlPlayer["titlesuffix"].InnerText = player.Title.Suffix;
+
             }
             else
             {

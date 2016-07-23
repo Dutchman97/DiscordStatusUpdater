@@ -82,5 +82,16 @@ namespace DiscordStatusUpdater.Properties {
                 this["Remember"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.ArrayList Websites {
+            get {
+                return ((global::System.Collections.ArrayList)(this["Websites"]));
+            }
+            set {
+                this["Websites"] = value;
+            }
+        }
     }
 }
