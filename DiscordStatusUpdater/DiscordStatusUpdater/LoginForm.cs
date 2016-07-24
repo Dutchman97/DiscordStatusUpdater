@@ -44,7 +44,7 @@ namespace DiscordStatusUpdater
                 Console.WriteLine("Added player " + player.ToString());
             }
 
-            string[] extensions = new string[] { "mkv", "mp4", "avi" };
+            string[] extensions = new string[] { "mkv", "mp4", "avi", "m2ts", "webm", "m4a", "mka", "mp3", "flac" };
             Properties.Settings.Default.Extensions = new ArrayList(extensions);
 
             Properties.Settings.Default.Save();

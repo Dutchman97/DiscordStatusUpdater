@@ -20,9 +20,9 @@
 		<titleprefix />
 		<titlesuffix> - PotPlayer</titlesuffix>
 	</player>
-	<player name="Google Chrome" type="browser">
+	<!--<player name="Google Chrome" type="browser">
 		<filename>chrome</filename>
 		<titleprefix />
 		<titlesuffix> - Google Chrome</titlesuffix>
-	</player>
+	</player>-->
 </players>

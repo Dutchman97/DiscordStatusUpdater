@@ -121,13 +121,17 @@ namespace DiscordStatusUpdater
                 updateTimerLabel.Text = "No status update possible yet";
                 updateTimerLabel.ForeColor = System.Drawing.Color.FromArgb(0xFF, 0xCC, 0x84, 0x00);
                 SetHelpLabel();
-                
-                if (status == string.Empty)
-                    statusTextBox.Text = "";
-                else
-                    statusTextBox.Rtf = @"{\rtf1\ansi {\colortbl;\red0\green0\blue0;}\cf1 " + PLAYINGTEXT + @"\b\cf0 " + status + @"\b0 }";
 
-                client.SetGame(status);
+                if (status == string.Empty)
+                {
+                    statusTextBox.Text = "";
+                    client.SetGame(null);
+                }
+                else
+                {
+                    client.SetGame(status);
+                    statusTextBox.Rtf = @"{\rtf1\ansi {\colortbl;\red0\green0\blue0;}\cf1 " + PLAYINGTEXT + @"\b\cf0 " + status + @"\b0 }";
+                }
             }
         }
 
