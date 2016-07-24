@@ -10,11 +10,26 @@
 		<titleprefix />
 		<titlesuffix />
 	</player>
+  <player name="MPC-HC (64-bit)">
+    <filename>mpc-hc64</filename>
+    <titleprefix />
+    <titlesuffix />
+  </player>
 	<player name="MPC-BE">
 		<filename>mpc-be</filename>
 		<titleprefix />
 		<titlesuffix> - MPC-BE</titlesuffix>
 	</player>
+  <player name="MPC-BE (64-bit)">
+    <filename>mpc-be64</filename>
+    <titleprefix />
+    <titlesuffix> - MPC-BE</titlesuffix>
+  </player>
+  <player name="PotPlayer">
+    <filename>PotPlayer</filename>
+    <titleprefix />
+    <titlesuffix> - PotPlayer</titlesuffix>
+  </player>
 	<player name="PotPlayer (64-bit)">
 		<filename>PotPlayerMini64</filename>
 		<titleprefix />
