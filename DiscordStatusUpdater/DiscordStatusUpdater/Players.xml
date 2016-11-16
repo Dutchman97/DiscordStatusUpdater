@@ -26,7 +26,7 @@
     <titlesuffix> - MPC-BE</titlesuffix>
   </player>
   <player name="PotPlayer">
-    <filename>PotPlayer</filename>
+    <filename>PotPlayerMini</filename>
     <titleprefix />
     <titlesuffix> - PotPlayer</titlesuffix>
   </player>

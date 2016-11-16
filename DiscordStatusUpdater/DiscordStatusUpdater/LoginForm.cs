@@ -106,8 +106,16 @@ namespace DiscordStatusUpdater
             return true;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        bool button1Clicked = false;
+        object o = new object();
+        private async void button1_Click(object sender, EventArgs e)
         {
+            lock (o)
+            {
+                if (button1Clicked) return;
+                else button1Clicked = true;
+            }
+
             DiscordClient client = new DiscordClient();
 
             try
@@ -116,7 +124,7 @@ namespace DiscordStatusUpdater
                 textBox2.Enabled = false;
                 this.Text = "Logging in...";
 
-                client.Connect(textBox1.Text, textBox2.Text);
+                await client.Connect(textBox1.Text, textBox2.Text);
 
                 if (client.State == ConnectionState.Connected || client.State == ConnectionState.Connecting)
                 {
@@ -139,7 +147,7 @@ namespace DiscordStatusUpdater
                         var delta = DateTime.Now - start;
                         if (delta >= TimeSpan.FromSeconds(TIMEOUT))
                             throw new TimeoutException("Login timed out. Either the email/password provided is incorrect or the program can not connect to Discord.");
-                        else if (delta <= TimeSpan.Zero)
+                        else if (delta < TimeSpan.Zero)
                             throw new Exception("The time on this computer was changed.");
                     }
 
@@ -158,9 +166,14 @@ namespace DiscordStatusUpdater
                 textBox1.Enabled = true;
                 textBox2.Enabled = true;
                 this.Text = "DiscordStatusUpdater";
-                MessageBox.Show(ex.Message, "Failed to login", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                Console.WriteLine(ex.ToString());
+                MessageBox.Show(ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace, "Failed to login", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                Console.WriteLine(ex.ToString() + Environment.NewLine + ex.StackTrace);
                 client.Dispose();
+            }
+
+            lock (o)
+            {
+                button1Clicked = false;
             }
         }
 
