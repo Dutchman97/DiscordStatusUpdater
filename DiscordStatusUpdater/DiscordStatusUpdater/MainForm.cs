@@ -17,6 +17,8 @@ namespace DiscordStatusUpdater
         const int CHECKINTERVAL = 10000, UPDATEINTERVAL = 10000;
         const string PLAYINGTEXT = " Playing ";
 
+        StatusUpdater statusUpdater;
+
         public MainForm(DiscordClient client)
         {
             InitializeComponent();
@@ -24,12 +26,13 @@ namespace DiscordStatusUpdater
 
             checkTimer.Interval = 1;
             checkTimer.Start();
-            updateTimer.Stop();
+            //updateTimer.Stop();
             updateTimerLabel.Text = "Status update possible";
             updateTimerLabel.ForeColor = System.Drawing.Color.Green;
             SetHelpLabel();
             usernameLabel.Text = "Logged in as " + client.CurrentUser.Name;
             Console.WriteLine(usernameLabel.Text);
+            statusUpdater = new StatusUpdater(updateTimer, client);
         }
 
         private string GetVideoTitle()
@@ -91,8 +94,8 @@ namespace DiscordStatusUpdater
 
         private void ChangeStatus(string status)
         {
-            Console.WriteLine("Trying to change status to " + status);
-            
+            statusUpdater.ChangeStatus(status);
+            /*
             if ((status == string.Empty && statusTextBox.Text == string.Empty) || (statusTextBox.Text != string.Empty && status == statusTextBox.Text.Substring(PLAYINGTEXT.Length)))
                 return;
 
@@ -132,7 +135,7 @@ namespace DiscordStatusUpdater
                     client.SetGame(status);
                     statusTextBox.Rtf = @"{\rtf1\ansi {\colortbl;\red0\green0\blue0;}\cf1 " + PLAYINGTEXT + @"\b\cf0 " + status + @"\b0 }";
                 }
-            }
+            }*/
         }
 
         private void ChangeMode()
@@ -171,6 +174,7 @@ namespace DiscordStatusUpdater
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            /*
             if (updateTimer.Enabled && statusTextBox.Text.Length > 0 && statusTextBox.Text.Substring(PLAYINGTEXT.Length) != string.Empty)
             {
                 DialogResult result = MessageBox.Show("Your current status message will stay the same if you close the program now.\nAre you sure you want to close the program?",
@@ -193,7 +197,7 @@ namespace DiscordStatusUpdater
 
                 // Yes, a Thread.Sleep() since appearantly calling client.SetGame() does not wait for the new status to get sent.
                 Thread.Sleep(300);
-            }
+            }*/
 
             client.Disconnect();
         }
@@ -210,6 +214,7 @@ namespace DiscordStatusUpdater
 
         private void updateTimer_Tick(object sender, EventArgs e)
         {
+            /*
             Console.WriteLine("Update timer ticked");
             updateTimerLabel.Text = "Status update possible";
             updateTimerLabel.ForeColor = System.Drawing.Color.Green;
@@ -220,6 +225,7 @@ namespace DiscordStatusUpdater
                 ChangeStatus(pendingStatus);
             
             pendingStatus = null;
+            */
         }
 
         private void settingsButton_Click(object sender, EventArgs e)
