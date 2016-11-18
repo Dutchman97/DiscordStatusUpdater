@@ -15,7 +15,7 @@ namespace DiscordStatusUpdater
         // The String class instead of the string struct, because now 'null' can represent no status change
         String pendingStatus = null;
         const int CHECKINTERVAL = 10000, UPDATEINTERVAL = 10000;
-        const string PLAYINGTEXT = " Playing ";
+        const string PLAYINGTEXT = "Playing";
 
         StatusUpdater statusUpdater;
 
@@ -26,13 +26,14 @@ namespace DiscordStatusUpdater
 
             checkTimer.Interval = 1;
             checkTimer.Start();
-            //updateTimer.Stop();
             updateTimerLabel.Text = "Status update possible";
             updateTimerLabel.ForeColor = System.Drawing.Color.Green;
             SetHelpLabel();
             usernameLabel.Text = "Logged in as " + client.CurrentUser.Name;
             Console.WriteLine(usernameLabel.Text);
+
             statusUpdater = new StatusUpdater(updateTimer, client);
+            statusUpdater.StatusSetAttempted += StatusSetAttempted;
         }
 
         private string GetVideoTitle()
@@ -174,8 +175,7 @@ namespace DiscordStatusUpdater
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            /*
-            if (updateTimer.Enabled && statusTextBox.Text.Length > 0 && statusTextBox.Text.Substring(PLAYINGTEXT.Length) != string.Empty)
+            if (!statusUpdater.StatusUpdatePossible)
             {
                 DialogResult result = MessageBox.Show("Your current status message will stay the same if you close the program now.\nAre you sure you want to close the program?",
                     "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
@@ -186,20 +186,44 @@ namespace DiscordStatusUpdater
                     return;
                 }
             }
-
-            updateTimer.Stop();
+            
             this.Text = "Closing...";
+            statusUpdater.ChangeStatus(string.Empty);
 
-            if (statusTextBox.Text != string.Empty)
-            {
-                client.SetGame(string.Empty);
-                statusTextBox.Text = string.Empty;
-
-                // Yes, a Thread.Sleep() since appearantly calling client.SetGame() does not wait for the new status to get sent.
-                Thread.Sleep(300);
-            }*/
+            // Yes, a Thread.Sleep() since appearantly calling client.SetGame() does not wait for the new status to get sent.
+            //Thread.Sleep(300);
 
             client.Disconnect();
+        }
+
+        private void StatusSetAttempted(object sender, StatusUpdater.StatusSetAttemptedEventArgs e)
+        {
+            if (e.CurrentStatus == string.Empty)
+                statusTextBox.Text = string.Empty;
+            else
+                statusTextBox.Rtf = @"{\rtf1\ansi {\colortbl;\red0\green0\blue0;}\cf1  " + PLAYINGTEXT + @" \b\cf0 " + e.CurrentStatus + @"\b0 }";
+
+            if (e.Timer.Enabled)
+            {
+                if (e.NewStatus == null)
+                {
+                    updateTimerLabel.ForeColor = System.Drawing.Color.FromArgb(0xFF, 0xCC, 0x84, 0x00);
+                    updateTimerLabel.Text = "No status update possible yet";
+                }
+                else
+                {
+                    updateTimerLabel.ForeColor = System.Drawing.Color.Red;
+                    if (e.NewStatus == string.Empty)
+                        updateTimerLabel.Text = "Pending status removal";
+                    else
+                        updateTimerLabel.Text = "Pending status update: " + e.NewStatus;
+                }
+            }
+            else
+            {
+                updateTimerLabel.ForeColor = System.Drawing.Color.Green;
+                updateTimerLabel.Text = "Status update possible";
+            }
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)

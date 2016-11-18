@@ -26,13 +26,15 @@ namespace DiscordStatusUpdater
             
             this.client = client;
             this.timer = timer;
-            timer.Enabled = false;
+            timer.Interval = 1000;
+            timer.Start();
             timer.Tick += new EventHandler(AttemptSetStatus);
         }
 
         public void ChangeStatus(string status)
         {
-            Debug.WriteLine("Trying to change status to " + status);
+            Debug.WriteLine(string.Empty);
+            Debug.WriteLine("!!Trying to change status to " + status);
 
             if (status == null)
                 throw new NullReferenceException("Status can not be set to null.");
@@ -44,7 +46,7 @@ namespace DiscordStatusUpdater
 
         void AttemptSetStatus(object sender, EventArgs e1)
         {
-            Debug.WriteLine("");
+            Debug.WriteLine(string.Empty);
             Debug.WriteLine(sender.ToString());
             Debug.WriteLine("Attempting to set new status...");
 
@@ -54,34 +56,49 @@ namespace DiscordStatusUpdater
             if (newStatus == null)
             {
                 Debug.WriteLine("No new status");
-                return;
+                //return;
             }
-
-            StatusSetAttemptedEventArgs e = new StatusSetAttemptedEventArgs();
-
-            if (!timer.Enabled)
+            else if (newStatus == curStatus)
             {
-                Debug.WriteLine("Timer is disabled, setting status to " + newStatus);
-                client.SetGame(newStatus == "" ? null : newStatus);
-                curStatus = newStatus;
-                newStatus = null;
-
-                timer.Interval = 10000;
-                timer.Start();
+                Debug.WriteLine("Same status, aborting");
+                //return;
             }
             else
             {
-                Debug.WriteLine("Timer is enabled, interval: " + timer.Interval);
+                if (!timer.Enabled)
+                {
+                    Debug.WriteLine("Timer is disabled, setting status to " + newStatus);
+                    client.SetGame(newStatus == string.Empty ? null : newStatus);
+                    curStatus = newStatus;
+                    newStatus = null;
+
+                    timer.Interval = 10000;
+                    timer.Start();
+                }
+                else
+                {
+                    Debug.WriteLine("Timer is enabled");
+                }
             }
-            
+
             if (StatusSetAttempted != null)
+            {
+                StatusSetAttemptedEventArgs e = new StatusSetAttemptedEventArgs();
+                e.CurrentStatus = curStatus;
+                e.NewStatus = newStatus;
+                e.Timer = timer;
                 StatusSetAttempted(this, e);
+            }
         }
+
+        public bool StatusUpdatePossible
+        { get { return newStatus == null && !timer.Enabled; } }
 
         public class StatusSetAttemptedEventArgs : EventArgs
         {
             public string CurrentStatus { get; set; }
             public string NewStatus { get; set; }
+            public Timer Timer { get; set; }
         }
     }
 }
