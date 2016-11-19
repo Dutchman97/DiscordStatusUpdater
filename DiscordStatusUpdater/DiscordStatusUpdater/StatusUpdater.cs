@@ -12,7 +12,7 @@ namespace DiscordStatusUpdater
 
         DiscordClient client;
         Timer timer;
-        string curStatus = null;
+        string curStatus = string.Empty;
         string newStatus = null;
 
         public StatusUpdater(Timer timer, DiscordClient client)
@@ -28,7 +28,7 @@ namespace DiscordStatusUpdater
             this.timer = timer;
             timer.Interval = 1000;
             timer.Start();
-            timer.Tick += new EventHandler(AttemptSetStatus);
+            timer.Tick += new EventHandler(AttemptToSetStatus);
         }
 
         public void ChangeStatus(string status)
@@ -41,10 +41,10 @@ namespace DiscordStatusUpdater
 
             newStatus = status;
 
-            AttemptSetStatus(this, null);
+            AttemptToSetStatus(this, null);
         }
 
-        void AttemptSetStatus(object sender, EventArgs e1)
+        void AttemptToSetStatus(object sender, EventArgs e1)
         {
             Debug.WriteLine(string.Empty);
             Debug.WriteLine(sender.ToString());
@@ -56,12 +56,11 @@ namespace DiscordStatusUpdater
             if (newStatus == null)
             {
                 Debug.WriteLine("No new status");
-                //return;
             }
             else if (newStatus == curStatus)
             {
+                newStatus = null;
                 Debug.WriteLine("Same status, aborting");
-                //return;
             }
             else
             {
@@ -89,6 +88,11 @@ namespace DiscordStatusUpdater
                 e.Timer = timer;
                 StatusSetAttempted(this, e);
             }
+        }
+
+        public void Dispose()
+        {
+            timer.Tick -= AttemptToSetStatus;
         }
 
         public bool StatusUpdatePossible

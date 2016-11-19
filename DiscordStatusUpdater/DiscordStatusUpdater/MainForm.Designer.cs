@@ -87,10 +87,6 @@
             this.setStatusButton.UseVisualStyleBackColor = true;
             this.setStatusButton.Click += new System.EventHandler(this.setStatusButton_Click);
             // 
-            // updateTimer
-            // 
-            this.updateTimer.Tick += new System.EventHandler(this.updateTimer_Tick);
-            // 
             // updateTimerLabel
             // 
             this.updateTimerLabel.AutoSize = true;

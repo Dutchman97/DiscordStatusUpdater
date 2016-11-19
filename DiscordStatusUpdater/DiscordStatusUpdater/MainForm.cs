@@ -96,47 +96,6 @@ namespace DiscordStatusUpdater
         private void ChangeStatus(string status)
         {
             statusUpdater.ChangeStatus(status);
-            /*
-            if ((status == string.Empty && statusTextBox.Text == string.Empty) || (statusTextBox.Text != string.Empty && status == statusTextBox.Text.Substring(PLAYINGTEXT.Length)))
-                return;
-
-            Console.WriteLine("New status not equal to old status");
-
-            if (updateTimer.Enabled)
-            {
-                Console.WriteLine("Update timer enabled");
-                pendingStatus = status;
-
-                if (status == string.Empty)
-                    updateTimerLabel.Text = "Pending status removal";
-                else
-                    updateTimerLabel.Text = "Pending status update: " + status;
-
-                updateTimerLabel.ForeColor = System.Drawing.Color.Red;
-
-                SetHelpLabel();
-            }
-            else
-            {
-                Console.WriteLine("Update timer disabled");
-                Console.WriteLine("Changed status to " + status);
-                updateTimer.Interval = UPDATEINTERVAL;
-                updateTimer.Start();
-                updateTimerLabel.Text = "No status update possible yet";
-                updateTimerLabel.ForeColor = System.Drawing.Color.FromArgb(0xFF, 0xCC, 0x84, 0x00);
-                SetHelpLabel();
-
-                if (status == string.Empty)
-                {
-                    statusTextBox.Text = "";
-                    client.SetGame(null);
-                }
-                else
-                {
-                    client.SetGame(status);
-                    statusTextBox.Rtf = @"{\rtf1\ansi {\colortbl;\red0\green0\blue0;}\cf1 " + PLAYINGTEXT + @"\b\cf0 " + status + @"\b0 }";
-                }
-            }*/
         }
 
         private void ChangeMode()
@@ -177,23 +136,36 @@ namespace DiscordStatusUpdater
         {
             if (!statusUpdater.StatusUpdatePossible)
             {
+                // StatusUpdater has to be removed, because if it's still active it will
+                // still use updateTimer, which somehow forces this form to close after this method
+                statusUpdater.Dispose();
+                statusUpdater = null;
+
                 DialogResult result = MessageBox.Show("Your current status message will stay the same if you close the program now.\nAre you sure you want to close the program?",
                     "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
 
                 if (result == DialogResult.No)
                 {
                     e.Cancel = true;
+
+                    statusUpdater = new StatusUpdater(updateTimer, client);
+                    statusUpdater.StatusSetAttempted += StatusSetAttempted;
                     return;
                 }
             }
             
             this.Text = "Closing...";
-            statusUpdater.ChangeStatus(string.Empty);
+            client.SetGame(null);
 
             // Yes, a Thread.Sleep() since appearantly calling client.SetGame() does not wait for the new status to get sent.
-            //Thread.Sleep(300);
-
+            Thread.Sleep(300);
             client.Disconnect();
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Debug.WriteLine("Finishing closing...");
+            Application.Exit();
         }
 
         private void StatusSetAttempted(object sender, StatusUpdater.StatusSetAttemptedEventArgs e)
@@ -224,32 +196,8 @@ namespace DiscordStatusUpdater
                 updateTimerLabel.ForeColor = System.Drawing.Color.Green;
                 updateTimerLabel.Text = "Status update possible";
             }
-        }
 
-        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void setStatusButton_Click(object sender, EventArgs e)
-        {
-            setStatusTextBox_KeyDown(sender, new KeyEventArgs(Keys.Enter));
-        }
-
-        private void updateTimer_Tick(object sender, EventArgs e)
-        {
-            /*
-            Console.WriteLine("Update timer ticked");
-            updateTimerLabel.Text = "Status update possible";
-            updateTimerLabel.ForeColor = System.Drawing.Color.Green;
             SetHelpLabel();
-            updateTimer.Stop();
-
-            if (pendingStatus != null)
-                ChangeStatus(pendingStatus);
-            
-            pendingStatus = null;
-            */
         }
 
         private void settingsButton_Click(object sender, EventArgs e)
@@ -275,6 +223,11 @@ namespace DiscordStatusUpdater
         {
             if (settingsForm != null)
                 settingsForm.Location = new Point(this.DesktopLocation.X + this.Width - 15, this.DesktopLocation.Y);
+        }
+
+        private void setStatusButton_Click(object sender, EventArgs e)
+        {
+            setStatusTextBox_KeyDown(sender, new KeyEventArgs(Keys.Enter));
         }
 
         private void setStatusTextBox_KeyDown(object sender, KeyEventArgs e)
