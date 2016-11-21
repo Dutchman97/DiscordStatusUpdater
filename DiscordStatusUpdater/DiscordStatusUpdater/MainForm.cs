@@ -12,9 +12,7 @@ namespace DiscordStatusUpdater
         SettingsForm settingsForm;
         DiscordClient client;
         bool manual = false;
-        // The String class instead of the string struct, because now 'null' can represent no status change
-        String pendingStatus = null;
-        const int CHECKINTERVAL = 10000, UPDATEINTERVAL = 10000;
+        const int CHECKINTERVAL = 10000;
         const string PLAYINGTEXT = "Playing";
 
         StatusUpdater statusUpdater;

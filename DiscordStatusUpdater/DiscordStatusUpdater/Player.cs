@@ -6,6 +6,7 @@ namespace DiscordStatusUpdater
     public enum PlayerType { Player, Browser }
 
     [Serializable]
+    [Obsolete("Will not be used anymore: use DiscordStatusUpdater.Players classes instead.")]
     public class Player
     {
         public string Name { get; private set; }
