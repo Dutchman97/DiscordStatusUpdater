@@ -31,6 +31,7 @@ namespace DiscordStatusUpdater
 
         private void playerList_SelectedIndexChanged(object sender, EventArgs e)
         {
+            /*
             Console.WriteLine(playerList.SelectedIndex + ": " + playerList.SelectedItem);
 
             if (playerList.SelectedItem is Player)
@@ -47,6 +48,7 @@ namespace DiscordStatusUpdater
                 titlePrefixTextBox.Text = string.Empty;
                 titleSuffixTextBox.Text = string.Empty;
             }
+            */
         }
 
         private void UpdatePreviewTextBox()
@@ -61,6 +63,7 @@ namespace DiscordStatusUpdater
 
         private void applyButton_Click(object sender, EventArgs e)
         {
+            /*
             nameTextBox.Text = nameTextBox.Text.Trim();
             fileNameTextBox.Text = fileNameTextBox.Text.Trim();
 
@@ -138,6 +141,7 @@ namespace DiscordStatusUpdater
             int i = playerList.SelectedIndex;
             Reset();
             playerList.SelectedIndex = i;
+            */
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
@@ -150,6 +154,7 @@ namespace DiscordStatusUpdater
 
         private void deleteButton_Click(object sender, EventArgs e)
         {
+            /*
             if (!(playerList.SelectedItem is Player))
                 return;
 
@@ -168,6 +173,7 @@ namespace DiscordStatusUpdater
                 xmlDocument.Save("Players.xml");
                 Reset();
             }
+            */
         }
     }
 }

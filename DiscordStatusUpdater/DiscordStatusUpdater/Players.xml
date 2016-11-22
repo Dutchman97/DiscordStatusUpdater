@@ -1,43 +1,26 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<players version="1.1">
-	<player name="VLC">
-		<filename>vlc</filename>
-		<titleprefix />
-		<titlesuffix> - VLC media player</titlesuffix>
-	</player>
-	<player name="MPC-HC">
-		<filename>mpc-hc</filename>
-		<titleprefix />
-		<titlesuffix />
-	</player>
-  <player name="MPC-HC (64-bit)">
+<players version="1.2">
+  <player name="VLC">
+    <filename>vlc</filename>
+    <titleprefix />
+    <titlesuffix> - VLC media player</titlesuffix>
+    </player>
+  <player name="MPC-HC">
+    <filename>mpc-hc</filename>
     <filename>mpc-hc64</filename>
     <titleprefix />
     <titlesuffix />
   </player>
-	<player name="MPC-BE">
-		<filename>mpc-be</filename>
-		<titleprefix />
-		<titlesuffix> - MPC-BE</titlesuffix>
-	</player>
-  <player name="MPC-BE (64-bit)">
+  <player name="MPC-BE">
+    <filename>mpc-be</filename>
     <filename>mpc-be64</filename>
     <titleprefix />
     <titlesuffix> - MPC-BE</titlesuffix>
   </player>
   <player name="PotPlayer">
     <filename>PotPlayerMini</filename>
+    <filename>PotPlayerMini64</filename>
     <titleprefix />
     <titlesuffix> - PotPlayer</titlesuffix>
   </player>
-	<player name="PotPlayer (64-bit)">
-		<filename>PotPlayerMini64</filename>
-		<titleprefix />
-		<titlesuffix> - PotPlayer</titlesuffix>
-	</player>
-	<!--<player name="Google Chrome" type="browser">
-		<filename>chrome</filename>
-		<titleprefix />
-		<titlesuffix> - Google Chrome</titlesuffix>
-	</player>-->
 </players>

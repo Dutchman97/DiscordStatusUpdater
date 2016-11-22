@@ -16,6 +16,7 @@ namespace DiscordStatusUpdater
         const string PLAYINGTEXT = "Playing";
 
         StatusUpdater statusUpdater;
+        Players.PlayerManager playerManager;
 
         public MainForm(DiscordClient client)
         {
@@ -32,57 +33,15 @@ namespace DiscordStatusUpdater
 
             statusUpdater = new StatusUpdater(updateTimer, client);
             statusUpdater.StatusSetAttempted += StatusSetAttempted;
+
+            playerManager = new Players.PlayerManager();
         }
 
         private string GetVideoTitle()
         {
-            Process[] processes = Process.GetProcesses();
-            foreach (Process proc in processes)
-                if (!string.IsNullOrWhiteSpace(proc.MainWindowTitle))
-                    foreach (Player player in Properties.Settings.Default.Players)
-                        if (proc.ProcessName.ToLower() == player.FileName.ToLower())
-                            return ParseVideoTitle(player, proc.MainWindowTitle);
-            return string.Empty;
-        }
-
-        private string ParseVideoTitle(Player player, string title)
-        {
-            Console.WriteLine("Title: " + title);
-            // Remove prefix and suffix of the player from the title.
-            title -= player.Title;
-            Console.WriteLine("Title minus pre/suffix: " + title);
-
-            // Remove the file extension from the title
-            foreach (string extension in Properties.Settings.Default.Extensions)
-                if (title.EndsWith(extension, true, null))
-                {
-                    title = title.Remove(title.Length - 1 - extension.Length);
-                    Console.WriteLine("Extension: " + extension);
-                    break;
-                }
-            Console.WriteLine("Title minus extension: " + title);
-
-            // Remove square brackets and everything inbetween them.
-            while (true)
-            {
-                int first = title.IndexOf('[');
-                int last = title.IndexOf(']');
-                if (first < 0 || last < 0)
-                    break;
-
-                title = title.Remove(first, last - first + 1);
-            }
-            Console.WriteLine("Title minus brackets: " + title);
-
-            // Replace all underscores with whitespace.
-            title = title.Replace('_', ' ');
-            Console.WriteLine("Title minus underscores: " + title);
-
-            // Remove all leading and trailing whitespace.
-            title = title.Trim();
-
-            Console.WriteLine("Final title: " + title);
-            return title;
+            if (playerManager == null)
+                return string.Empty;
+            return playerManager.GetVideoTitle();
         }
 
         private void ChangeStatus()
