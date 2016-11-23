@@ -9,8 +9,6 @@ namespace DiscordStatusUpdater.Players
 {
     public abstract class Player
     {
-        protected Regex videoRegex;
-
         public Player(string[] processNames, string playerName)
         {
             ProcessNames = processNames;

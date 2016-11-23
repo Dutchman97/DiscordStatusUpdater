@@ -9,22 +9,23 @@ namespace DiscordStatusUpdater.Players
 {
     public class VideoPlayer : Player
     {
-        public VideoPlayer(string[] processNames, string playerName, Regex videoRegex) : base(processNames, playerName)
+        TitleParser titleParser;
+
+        public VideoPlayer(string[] processNames, string playerName, TitleParser titleParser) : base(processNames, playerName)
         {
-            this.videoRegex = videoRegex;
+            this.titleParser = titleParser;
         }
 
         public override string GetVideoTitle(Process process)
         {
             string windowTitle = process.MainWindowTitle;
-            string videoName = videoRegex.Match(windowTitle).Value;
-            return videoName;
+            return titleParser.Parse(windowTitle);
         }
 
         public override bool IsVideoPlaying(Process process)
         {
             string windowTitle = process.MainWindowTitle;
-            return videoRegex.IsMatch(windowTitle);
+            return titleParser.CanParse(windowTitle);
         }
 
         public override string ToString()

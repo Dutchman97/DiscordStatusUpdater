@@ -56,7 +56,7 @@ namespace DiscordStatusUpdater.Players
             for (int i = 0; i < xmlProcessNames.Count; i++)
                 processNames[i] = xmlProcessNames[i].InnerText;
 
-            return new VideoPlayer(processNames, playerName, videoRegex);
+            return new VideoPlayer(processNames, playerName, new TitleParser(titlePrefix, titlesuffix));
         }
 
         static bool CheckVersion(string version)
