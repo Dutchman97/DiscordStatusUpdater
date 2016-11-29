@@ -82,6 +82,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -89,6 +90,8 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationClient" />
+    <Reference Include="UIAutomationTypes" />
     <Reference Include="WebSocket4Net, Version=0.14.1.0, Culture=neutral, PublicKeyToken=eb4e154b696bf72a, processorArchitecture=MSIL">
       <HintPath>..\packages\WebSocket4Net.0.14.1\lib\net45\WebSocket4Net.dll</HintPath>
       <Private>True</Private>
@@ -111,6 +114,7 @@
     <Compile Include="Players\VideoPlayers\VideoPlayerLoader.cs" />
     <Compile Include="Players\PlayerManager.cs" />
     <Compile Include="Players\VideoPlayers\VideoPlayer.cs" />
+    <Compile Include="Players\WebBrowsers\Chrome.cs" />
     <Compile Include="Players\WebBrowsers\WebBrowser.cs" />
     <Compile Include="Players\WebBrowsers\WebBrowserLoader.cs" />
     <Compile Include="Program.cs" />
@@ -179,7 +183,6 @@
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

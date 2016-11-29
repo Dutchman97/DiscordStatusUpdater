@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DiscordStatusUpdater.Players.WebBrowsers
+namespace DiscordStatusUpdater.Players
 {
     public static class WebBrowserLoader
     {
+        public static void LoadPlayers(List<Player> players)
+        {
+
+        }
     }
 }

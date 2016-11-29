@@ -11,9 +11,9 @@ namespace DiscordStatusUpdater.Players
     {
         TitleParser titleParser;
 
-        public VideoPlayer(string[] processNames, string playerName, TitleParser titleParser) : base(processNames, playerName)
+        public VideoPlayer(string[] processNames, string playerName, string titlePrefix, string titleSuffix) : base(processNames, playerName)
         {
-            this.titleParser = titleParser;
+            titleParser = new TitleParser(titlePrefix, titleSuffix);
         }
 
         public override string GetVideoTitle(Process process)

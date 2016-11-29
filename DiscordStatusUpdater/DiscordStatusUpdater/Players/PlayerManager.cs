@@ -15,6 +15,7 @@ namespace DiscordStatusUpdater.Players
         {
             players = new List<Player>();
             VideoPlayerLoader.LoadPlayers(players);
+            WebBrowserLoader.LoadPlayers(players);
             // TODO: Load every WebBrowser
         }
 
