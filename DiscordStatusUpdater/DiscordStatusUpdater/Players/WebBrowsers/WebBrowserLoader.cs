@@ -10,7 +10,8 @@ namespace DiscordStatusUpdater.Players
     {
         public static void LoadPlayers(List<Player> players)
         {
-
+            //players.Add(new Chrome());
+            players.Add(new Edge());
         }
     }
 }

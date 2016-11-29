@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
 namespace DiscordStatusUpdater.Players
 {
@@ -14,6 +10,6 @@ namespace DiscordStatusUpdater.Players
         }
         // TODO: Think more about how to implement web browsers in this
 
-        protected abstract string GetUrl();
+        protected abstract string GetUrl(Process process);
     }
 }

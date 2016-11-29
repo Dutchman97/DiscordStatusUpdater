@@ -6,11 +6,11 @@ using System.Windows.Automation;
 
 namespace DiscordStatusUpdater.Players
 {
-    public class Chrome : WebBrowser
+    public class Edge : WebBrowser
     {
-        public Chrome() : base(new string[] { "chrome" }, "Google Chrome")
+        public Edge() : base(new string[] { "ApplicationFrameHost" }, "(Possibly) Microsoft Edge")
         {
-            
+
         }
 
         protected override string GetUrl(Process process)
@@ -18,7 +18,7 @@ namespace DiscordStatusUpdater.Players
             // The process must have a window 
             if (process.MainWindowHandle == IntPtr.Zero)
                 return null;
-                
+
             AutomationElement root = AutomationElement.FromHandle(process.MainWindowHandle);
 
             // For each element, try to find out if it contains an URL
@@ -30,7 +30,7 @@ namespace DiscordStatusUpdater.Players
                     continue;
 
                 Uri uri;
-                if (!Uri.TryCreate(propertyValue, UriKind.Absolute, out uri))
+                if (!Uri.TryCreate("http://" + propertyValue, UriKind.Absolute, out uri))
                     continue;
 
                 return propertyValue;
@@ -42,7 +42,7 @@ namespace DiscordStatusUpdater.Players
         public override string GetVideoTitle(Process process)
         {
             Debug.WriteLine(GetUrl(process));
-            return "test123";//GetUrl(process);
+            return "test321";//GetUrl(process);
         }
 
         public override bool IsVideoPlaying(Process process)

@@ -115,6 +115,7 @@
     <Compile Include="Players\PlayerManager.cs" />
     <Compile Include="Players\VideoPlayers\VideoPlayer.cs" />
     <Compile Include="Players\WebBrowsers\Chrome.cs" />
+    <Compile Include="Players\WebBrowsers\Edge.cs" />
     <Compile Include="Players\WebBrowsers\WebBrowser.cs" />
     <Compile Include="Players\WebBrowsers\WebBrowserLoader.cs" />
     <Compile Include="Program.cs" />
