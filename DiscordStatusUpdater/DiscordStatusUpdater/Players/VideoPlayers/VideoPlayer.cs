@@ -9,11 +9,11 @@ namespace DiscordStatusUpdater.Players
 {
     public class VideoPlayer : Player
     {
-        TitleParser titleParser;
+        VideoPlayerTitleParser titleParser;
 
         public VideoPlayer(string[] processNames, string playerName, string titlePrefix, string titleSuffix) : base(processNames, playerName)
         {
-            titleParser = new TitleParser(titlePrefix, titleSuffix);
+            titleParser = new VideoPlayerTitleParser(titlePrefix, titleSuffix);
         }
 
         public override bool TryGetVideoTitle(Process process, out string videoTitle)

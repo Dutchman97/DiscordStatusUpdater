@@ -8,7 +8,7 @@ namespace DiscordStatusUpdater.Players
 {
     public class Chrome : WebBrowser
     {
-        public Chrome() : base(new string[] { "chrome" }, "Google Chrome")
+        public Chrome(List<WebsiteTitleParser> websites, string titlePrefix, string titleSuffix) : base(new string[] { "chrome" }, "Google Chrome", websites, titlePrefix, titleSuffix)
         {
             
         }
@@ -38,22 +38,6 @@ namespace DiscordStatusUpdater.Players
             }
 
             return false;
-        }
-
-        public override bool TryGetVideoTitle(Process process, out string videoTitle)
-        {
-            Uri uri;
-            if (TryGetUrl(process, out uri))
-            {
-                //videoTitle = UseUriToGetVideo(uri);
-                videoTitle = "test123";
-                return true;
-            }
-            else
-            {
-                videoTitle = null;
-                return false;
-            }
         }
     }
 }

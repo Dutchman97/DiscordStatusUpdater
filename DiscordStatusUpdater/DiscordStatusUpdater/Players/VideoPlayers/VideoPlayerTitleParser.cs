@@ -6,19 +6,18 @@ using System.Threading.Tasks;
 
 namespace DiscordStatusUpdater.Players
 {
-    public class TitleParser
+    public class VideoPlayerTitleParser : TitleParser
     {
-        Regex regex;
-        int captIdx;
+        int groupIdx;
 
-        public TitleParser(string prefix, string suffix)
+        public VideoPlayerTitleParser(string prefix, string suffix)
         {
             // Regex to capture player prefix and suffix, and file extension, and video file name
-            regex = new Regex(@"^(" + prefix + @")(.+)(\.\w{1,4})(" + suffix + ")$");
-            captIdx = 2;
+            regex = new Regex(@"^(" + prefix + @")(.+)(\.\w{1,4})?(" + suffix + ")$");
+            groupIdx = 2;
         }
 
-        public bool TryParse(string fullTitle, out string result)
+        public override bool TryParse(string fullTitle, out string result)
         {
             // First, check if the title can be parsed
             if (!regex.IsMatch(fullTitle))
@@ -29,12 +28,7 @@ namespace DiscordStatusUpdater.Players
 
             // Get the captured video file name using the regex
             // Note: for some reason, group index starts with 1, while capture index starts with 0
-            Match match = regex.Match(fullTitle);
-            GroupCollection groups = match.Groups;
-            Group group = groups[captIdx];
-            CaptureCollection captures = group.Captures;
-            Capture capture = captures[0];
-            string videoName = capture.Value;
+            string videoName = regex.Match(fullTitle).Groups[groupIdx].Captures[0].Value;
 
             // For internet-downloaded files, replace underscores with whitespace
             if (!videoName.Contains(" "))
