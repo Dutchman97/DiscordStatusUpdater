@@ -8,7 +8,8 @@ namespace DiscordStatusUpdater.Players
 {
     public class Edge : WebBrowser
     {
-        public Edge() : base(new string[] { "ApplicationFrameHost" }, "(Possibly) Microsoft Edge")
+        public Edge(List<WebsiteTitleParser> websites, string titlePrefix, string titleSuffix)
+            : base(new string[] { "ApplicationFrameHost" }, "(Possibly) Microsoft Edge", websites, titlePrefix, titleSuffix)
         {
 
         }
