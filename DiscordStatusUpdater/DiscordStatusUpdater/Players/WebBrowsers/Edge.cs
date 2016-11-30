@@ -13,11 +13,13 @@ namespace DiscordStatusUpdater.Players
 
         }
 
-        protected override string GetUrl(Process process)
+        protected override bool TryGetUrl(Process process, out Uri uri)
         {
-            // The process must have a window 
-            if (process.MainWindowHandle == IntPtr.Zero)
-                return null;
+            uri = null;
+
+            // The process must have a window and that window must contain "Microsoft Edge"
+            if (process.MainWindowHandle == IntPtr.Zero || !process.MainWindowTitle.Contains("Microsoft Edge"))
+                return false;
 
             AutomationElement root = AutomationElement.FromHandle(process.MainWindowHandle);
 
@@ -28,27 +30,30 @@ namespace DiscordStatusUpdater.Players
                 string propertyValue = (string)descendants[i].GetCurrentPropertyValue(ValuePatternIdentifiers.ValueProperty);
                 if (string.IsNullOrWhiteSpace(propertyValue))
                     continue;
-
-                Uri uri;
+                
                 if (!Uri.TryCreate("http://" + propertyValue, UriKind.Absolute, out uri))
                     continue;
 
-                return propertyValue;
+                return true;
             }
 
-            return null;
+            return false;
         }
 
-        public override string GetVideoTitle(Process process)
+        public override bool TryGetVideoTitle(Process process, out string videoTitle)
         {
-            Debug.WriteLine(GetUrl(process));
-            return "test321";//GetUrl(process);
-        }
-
-        public override bool IsVideoPlaying(Process process)
-        {
-            Debug.WriteLine("Checking for url...");
-            return GetUrl(process) != null;
+            Uri uri;
+            if (TryGetUrl(process, out uri))
+            {
+                //videoTitle = UseUriToGetVideo(uri);
+                videoTitle = "test123";
+                return true;
+            }
+            else
+            {
+                videoTitle = null;
+                return false;
+            }
         }
     }
 }

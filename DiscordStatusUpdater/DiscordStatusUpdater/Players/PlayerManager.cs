@@ -22,25 +22,15 @@ namespace DiscordStatusUpdater.Players
         public string GetVideoTitle()
         {
             Process[] processes = Process.GetProcesses();
-            /*
-            foreach (Process proc in processes)
-                if (!string.IsNullOrWhiteSpace(proc.MainWindowTitle))
-                    foreach (Player player in players)
-                        foreach (string processName in player.ProcessNames)
-                            if (proc.ProcessName.ToLower() == processName.ToLower())
-                                if (player.IsVideoPlaying(proc))
-                                    return player.GetVideoTitle(proc);
-                                    */
-
-            //foreach (Process p in Process.GetProcesses())
-            //    if (!string.IsNullOrEmpty(p.MainWindowTitle))
-            //        Debug.WriteLine("{0}: {1}", p.ProcessName, p.MainWindowTitle);
 
             foreach (Player player in players)
                 foreach (string processName in player.ProcessNames)
                     foreach (Process process in Process.GetProcessesByName(processName))
-                        if (player.IsVideoPlaying(process))
-                            return player.GetVideoTitle(process);
+                    {
+                        string videoTitle;
+                        if (player.TryGetVideoTitle(process, out videoTitle))
+                            return videoTitle;
+                    }
 
             return string.Empty;
         }

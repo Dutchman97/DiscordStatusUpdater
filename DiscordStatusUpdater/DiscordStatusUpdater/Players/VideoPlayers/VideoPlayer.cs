@@ -16,16 +16,21 @@ namespace DiscordStatusUpdater.Players
             titleParser = new TitleParser(titlePrefix, titleSuffix);
         }
 
-        public override string GetVideoTitle(Process process)
+        public override bool TryGetVideoTitle(Process process, out string videoTitle)
         {
             string windowTitle = process.MainWindowTitle;
-            return titleParser.Parse(windowTitle);
-        }
 
-        public override bool IsVideoPlaying(Process process)
-        {
-            string windowTitle = process.MainWindowTitle;
-            return titleParser.CanParse(windowTitle);
+            string result;
+            if (titleParser.TryParse(windowTitle, out result))
+            {
+                videoTitle = result;
+                return true;
+            }
+            else
+            {
+                videoTitle = null;
+                return false;
+            }
         }
 
         public override string ToString()

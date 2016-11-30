@@ -18,14 +18,15 @@ namespace DiscordStatusUpdater.Players
             captIdx = 2;
         }
 
-        public bool CanParse(string fullTitle)
+        public bool TryParse(string fullTitle, out string result)
         {
-            // Return whether or not the regex matches
-            return regex.IsMatch(fullTitle);
-        }
+            // First, check if the title can be parsed
+            if (!regex.IsMatch(fullTitle))
+            {
+                result = null;
+                return false;
+            }
 
-        public string Parse(string fullTitle)
-        {
             // Get the captured video file name using the regex
             // Note: for some reason, group index starts with 1, while capture index starts with 0
             Match match = regex.Match(fullTitle);
@@ -53,7 +54,8 @@ namespace DiscordStatusUpdater.Players
 
             // Remove all leading and trailing whitespace
             videoName = videoName.Trim();
-            return videoName;
+            result = videoName;
+            return true;
         }
 
         public override string ToString()

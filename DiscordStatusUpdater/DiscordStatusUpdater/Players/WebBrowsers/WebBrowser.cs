@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace DiscordStatusUpdater.Players
 {
@@ -10,6 +11,6 @@ namespace DiscordStatusUpdater.Players
         }
         // TODO: Think more about how to implement web browsers in this
 
-        protected abstract string GetUrl(Process process);
+        protected abstract bool TryGetUrl(Process process, out Uri uri);
     }
 }
