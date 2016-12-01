@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <websites version="1.0">
-	<website name="Crunchyroll">
-		<url>crunchyroll.com</url>
-		<titleprefix>Crunchyroll - Watch </titleprefix>
-		<titlesuffix />
-	</website>
-	<website name="Funimation">
-		<url>funimation.com</url>
-		<titleprefix />
-		<titlesuffix />
-	</website>
+  <website name="Crunchyroll">
+    <url>crunchyroll.com</url>
+    <regex>Crunchyroll - Watch (\w+) Episode (\d+) - (\w+)</regex>
+    <animeidx>1</animeidx>
+    <episodeidx>2</episodeidx>
+  </website>
+  <website name="Funimation">
+    <url>funimation.com</url>
+    <regex>(\w+) - (\w+?)</regex>
+    <animeidx>1</animeidx>
+    <episodeidx>0</episodeidx>
+  </website>
+  <website name="KissAnime">
+    <url>kissanime.to</url>
+    <regex>(\w+) Episode (\d+) - Watch \w+ Episode \d+ online in high quality</regex>
+    <animeidx>1</animeidx>
+    <episodeidx>2</episodeidx>
+  </website>
 </websites>

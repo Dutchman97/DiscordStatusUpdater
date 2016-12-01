@@ -31,8 +31,9 @@ namespace DiscordStatusUpdater.Players
                 string propertyValue = (string)descendants[i].GetCurrentPropertyValue(ValuePatternIdentifiers.ValueProperty);
                 if (string.IsNullOrWhiteSpace(propertyValue))
                     continue;
-                
-                if (!Uri.TryCreate(propertyValue, UriKind.Absolute, out uri))
+                Debug.WriteLine(propertyValue);
+
+                if (!Uri.TryCreate("http://" + propertyValue, UriKind.Absolute, out uri))
                     continue;
 
                 return true;

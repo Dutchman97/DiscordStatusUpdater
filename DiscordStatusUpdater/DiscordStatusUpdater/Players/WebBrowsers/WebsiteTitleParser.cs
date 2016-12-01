@@ -12,6 +12,7 @@ namespace DiscordStatusUpdater.Players
 
         public WebsiteTitleParser(string name, string baseUrl, Regex regex, int animeIdx, int episodeIdx)
         {
+            this.baseUrl = baseUrl;
             this.regex = regex;
             this.animeIdx = animeIdx;
             this.episodeIdx = episodeIdx;
@@ -47,7 +48,7 @@ namespace DiscordStatusUpdater.Players
 
         public override string ToString()
         {
-            return base.ToString();
+            return string.Format("{0} - {1}", Name, baseUrl);
         }
     }
 }

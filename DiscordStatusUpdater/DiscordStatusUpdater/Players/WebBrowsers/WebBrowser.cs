@@ -20,12 +20,20 @@ namespace DiscordStatusUpdater.Players
 
         public override bool TryGetVideoTitle(Process process, out string videoTitle)
         {
-            Uri uri;
+            // Try to remove the prefix...
+            string windowTitle = process.MainWindowTitle;
+            if (titlePrefix != string.Empty && windowTitle.StartsWith(titlePrefix))
+                windowTitle = windowTitle.Substring(titlePrefix.Length);
 
+            // ...and the suffix from the window title
+            if (titleSuffix != string.Empty && windowTitle.EndsWith(titleSuffix))
+                windowTitle = windowTitle.Remove(windowTitle.Length - titleSuffix.Length);
+
+            Uri uri;
             if (TryGetUrl(process, out uri))
                 foreach (WebsiteTitleParser website in websites)
                     if (website.IsWebsiteUrl(uri))
-                        if (website.TryParse(process.MainWindowTitle, out videoTitle))
+                        if (website.TryParse(windowTitle, out videoTitle))
                             return true;
 
             videoTitle = null;
