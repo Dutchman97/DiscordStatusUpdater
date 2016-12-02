@@ -19,8 +19,8 @@ namespace DiscordStatusUpdater.Players
         protected override Player LoadItem(XmlNode xmlVideoPlayer)
         {
             string titlePrefix = xmlVideoPlayer["titleprefix"].InnerText;
-            string titlesuffix = xmlVideoPlayer["titlesuffix"].InnerText;
-            Regex videoRegex = new Regex(@"(?<=" + titlePrefix + @").+(?=(\.\w{1,4})?" + titlesuffix + @")");
+            string titleSuffix = xmlVideoPlayer["titlesuffix"].InnerText;
+            Regex videoRegex = new Regex(@"(?<=" + titlePrefix + @").+(?=(\.\w{1,4})?" + titleSuffix + @")");
 
             string playerName = xmlVideoPlayer.Attributes["name"].Value;
             
@@ -29,7 +29,7 @@ namespace DiscordStatusUpdater.Players
             for (int i = 0; i < xmlProcessNames.Count; i++)
                 processNames[i] = xmlProcessNames[i].InnerText;
 
-            return new VideoPlayer(processNames, playerName, titlePrefix, titlesuffix);
+            return new VideoPlayer(processNames, playerName, titlePrefix, titleSuffix);
         }
     }
 }

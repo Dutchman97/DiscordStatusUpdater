@@ -12,7 +12,7 @@ namespace DiscordStatusUpdater
         SettingsForm settingsForm;
         DiscordClient client;
         bool manual = false;
-        const int CHECK_INTERVAL = 10000;
+        const int CHECK_INTERVAL = 15000;
         const string PLAYING_TEXT = "Playing";
 
         StatusUpdater statusUpdater;

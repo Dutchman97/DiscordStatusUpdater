@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<webbrowsers version="1.0">
+  <webbrowser name="Google Chrome">
+    <filename>chrome</filename>
+    <titleprefix />
+    <titlesuffix> - Google Chrome</titlesuffix>
+    </webbrowser>
+  <webbrowser name="Microsoft Edge">
+    <filename>ApplicationFrameHost</filename>
+    <titleprefix />
+    <titlesuffix> - Microsoft Edge</titlesuffix>
+  </webbrowser>
+  <webbrowser name="Mozilla Firefox">
+    <filename>firefox</filename>
+    <titleprefix />
+    <titlesuffix> - Mozilla Firefox</titlesuffix>
+  </webbrowser>
+</webbrowsers>

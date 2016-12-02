@@ -115,8 +115,6 @@
     <Compile Include="Players\VideoPlayers\VideoPlayerLoader.cs" />
     <Compile Include="Players\PlayerManager.cs" />
     <Compile Include="Players\VideoPlayers\VideoPlayer.cs" />
-    <Compile Include="Players\WebBrowsers\Chrome.cs" />
-    <Compile Include="Players\WebBrowsers\Edge.cs" />
     <Compile Include="Players\WebBrowsers\WebBrowser.cs" />
     <Compile Include="Players\WebBrowsers\WebBrowserLoader.cs" />
     <Compile Include="Players\WebBrowsers\WebsiteLoader.cs" />
@@ -180,6 +178,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WebBrowsers.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Players.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>

@@ -15,7 +15,7 @@ namespace DiscordStatusUpdater.Players
         {
             players = new List<Player>();
             new VideoPlayerLoader().LoadItems(players);
-            WebBrowserLoader.LoadPlayers(players);
+            new WebBrowserLoader().LoadItems(players);
         }
 
         public string GetVideoTitle()

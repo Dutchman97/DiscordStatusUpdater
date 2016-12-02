@@ -7,7 +7,7 @@ using System.Windows.Automation;
 
 namespace DiscordStatusUpdater.Players
 {
-    public abstract class WebBrowser : Player
+    public class WebBrowser : Player
     {
         List<WebsiteTitleParser> websites;
         string titlePrefix, titleSuffix;
@@ -19,45 +19,7 @@ namespace DiscordStatusUpdater.Players
             this.titleSuffix = titleSuffix;
         }
 
-        #region GetWindows()-related code
-        /*
-        protected virtual Window[] GetWindows(Process process)
-        {
-            // The process must have a window 
-            if (process.MainWindowHandle == IntPtr.Zero)
-                return new Window[0];
-
-            List<Window> windowList = new List<Window>();
-
-            var windowHandles = GetWindows((uint)process.Id);
-            foreach (var windowHandle in windowHandles)
-            {
-                Debug.WriteLine("=====");
-
-                AutomationElement root = AutomationElement.FromHandle(windowHandle);
-                var descendants = root.FindAll(TreeScope.Descendants, Condition.TrueCondition);
-                for (int i = 0; i < descendants.Count; i++)
-                {
-                    string propertyValue = (string)descendants[i].GetCurrentPropertyValue(ValuePatternIdentifiers.ValueProperty);
-                    if (string.IsNullOrWhiteSpace(propertyValue))
-                        continue;
-                    Debug.WriteLine(propertyValue);
-
-                    Uri uri;
-                    if (!Uri.TryCreate("http://" + propertyValue, UriKind.Absolute, out uri))
-                        continue;
-
-                    Window window = new Window() { Pointer = windowHandle, Process = process, Title = GetWindowTextRaw(windowHandle), Uri = uri };
-                    Debug.WriteLine(window);
-                    windowList.Add(window);
-                    break;
-                }
-            }
-
-            return windowList.ToArray();
-        }
-        */
-
+        #region PInvoke stuff
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
@@ -107,13 +69,18 @@ namespace DiscordStatusUpdater.Players
             if (process.MainWindowHandle == IntPtr.Zero)
                 return false;
 
+            // If the process is a windows app, check if the app is really the web browser
+            // by looking if the (main) window title starts with the title prefix and ends with the title suffix
+            if (process.ProcessName == "ApplicationFrameHost")
+                if (!process.MainWindowTitle.StartsWith(titlePrefix) || !process.MainWindowTitle.EndsWith(titleSuffix))
+                    return false;
+
             Stopwatch stopwatch = Stopwatch.StartNew();
+
             // For each window of the specified process...
             var windowHandles = GetWindows((uint)process.Id);
             foreach (var windowHandle in windowHandles)
             {
-                //Debug.WriteLine("=====");
-
                 string windowTitle = GetWindowTextRaw(windowHandle);
 
                 if (string.IsNullOrWhiteSpace(windowTitle))
@@ -132,8 +99,6 @@ namespace DiscordStatusUpdater.Players
 
                     if (!propertyValue.StartsWith("http"))
                         propertyValue = "http://" + propertyValue;
-
-                    //Debug.WriteLine(propertyValue);
 
                     Uri uri;
                     if (!Uri.TryCreate(propertyValue, UriKind.Absolute, out uri))
