@@ -14,13 +14,24 @@ namespace DiscordStatusUpdater.Players
 
         }
 
+        public override bool TryGetVideoTitle(Process process, out string videoTitle)
+        {
+            if (!process.MainWindowTitle.Contains("Microsoft Edge"))
+            {
+                videoTitle = null;
+                return false;
+            }
+            return base.TryGetVideoTitle(process, out videoTitle);
+        }
+
+        /*
         protected override Window[] GetWindows(Process process)
         {
             if (!process.MainWindowTitle.Contains("Microsoft Edge"))
                 return new Window[0];
 
             return base.GetWindows(process);
-        }
+        }*/
 
         /*
         protected override bool TryGetUrl(Process process, out Uri uri)

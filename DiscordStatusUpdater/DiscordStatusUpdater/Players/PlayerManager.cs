@@ -23,13 +23,13 @@ namespace DiscordStatusUpdater.Players
             foreach (Player player in players)
                 foreach (string processName in player.ProcessNames)
                 {
-                    Debug.WriteLineIf(processName == "chrome", "----------");
+                    //Debug.WriteLineIf(processName == "chrome", "----------");
 
                     Process[] processes = Process.GetProcessesByName(processName);
                     foreach (Process process in processes)
                     {
-                        if (processName == "chrome")
-                            Debug.WriteLine("{0}: {1}", process.Id, process.MainWindowTitle);
+                        //if (processName == "chrome")
+                        //    Debug.WriteLine("{0}: {1}", process.Id, process.MainWindowTitle);
 
                         string videoTitle;
                         if (player.TryGetVideoTitle(process, out videoTitle))

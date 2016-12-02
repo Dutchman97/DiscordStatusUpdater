@@ -38,7 +38,7 @@ namespace DiscordStatusUpdater.Players
             if (episodeIdx == 0)
                 episode = "";
             else
-                episode = " - " + match.Groups[episodeIdx].Captures[0].Value;
+                episode = " - Episode " + match.Groups[episodeIdx].Captures[0].Value;
 
             result = anime + episode;
             return true;

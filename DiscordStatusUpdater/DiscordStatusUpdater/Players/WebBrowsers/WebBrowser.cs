@@ -20,13 +20,14 @@ namespace DiscordStatusUpdater.Players
         }
 
         #region GetWindows()-related code
+        /*
         protected virtual Window[] GetWindows(Process process)
         {
-            List<Window> windowList = new List<Window>();
-
             // The process must have a window 
             if (process.MainWindowHandle == IntPtr.Zero)
                 return new Window[0];
+
+            List<Window> windowList = new List<Window>();
 
             var windowHandles = GetWindows((uint)process.Id);
             foreach (var windowHandle in windowHandles)
@@ -55,6 +56,7 @@ namespace DiscordStatusUpdater.Players
 
             return windowList.ToArray();
         }
+        */
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -89,9 +91,9 @@ namespace DiscordStatusUpdater.Players
         public static string GetWindowTextRaw(IntPtr hwnd)
         {
             // Allocate correct string length first
-
             int length = (int)SendMessage(hwnd, 0x000E, IntPtr.Zero, null);
             StringBuilder sb = new StringBuilder(length + 1);
+
             SendMessage(hwnd, 0x000D, (IntPtr)sb.Capacity, sb);
             return sb.ToString();
         }
@@ -99,19 +101,57 @@ namespace DiscordStatusUpdater.Players
 
         public override bool TryGetVideoTitle(Process process, out string videoTitle)
         {
+            videoTitle = null;
+
+            // The process must have a (main) window 
+            if (process.MainWindowHandle == IntPtr.Zero)
+                return false;
+
             Stopwatch stopwatch = Stopwatch.StartNew();
-            foreach (Window window in GetWindows(process))
-                foreach (WebsiteTitleParser website in websites)
-                    if (website.IsWebsiteUrl(window.Uri))
-                        if (website.TryParse(RemovePrefixAndSuffix(window.Title), out videoTitle))
-                        {
-                            stopwatch.Stop();
-                            Debug.WriteLine(stopwatch.Elapsed);
-                            return true;
-                        }
+            // For each window of the specified process...
+            var windowHandles = GetWindows((uint)process.Id);
+            foreach (var windowHandle in windowHandles)
+            {
+                //Debug.WriteLine("=====");
+
+                string windowTitle = GetWindowTextRaw(windowHandle);
+
+                if (string.IsNullOrWhiteSpace(windowTitle))
+                    continue;
+
+                windowTitle = RemovePrefixAndSuffix(windowTitle);
+
+                // For each automation element...
+                AutomationElement root = AutomationElement.FromHandle(windowHandle);
+                var descendants = root.FindAll(TreeScope.Descendants, new NotCondition(new PropertyCondition(ValuePatternIdentifiers.ValueProperty, string.Empty)));
+                for (int i = 0; i < descendants.Count; i++)
+                {
+                    string propertyValue = (string)descendants[i].GetCurrentPropertyValue(ValuePatternIdentifiers.ValueProperty);
+                    if (string.IsNullOrWhiteSpace(propertyValue))
+                        continue;
+
+                    if (!propertyValue.StartsWith("http"))
+                        propertyValue = "http://" + propertyValue;
+
+                    //Debug.WriteLine(propertyValue);
+
+                    Uri uri;
+                    if (!Uri.TryCreate(propertyValue, UriKind.Absolute, out uri))
+                        continue;
+
+                    foreach (WebsiteTitleParser website in websites)
+                        if (website.IsWebsiteUrl(uri))
+                            if (website.TryParse(windowTitle, out videoTitle))
+                            {
+                                stopwatch.Stop();
+                                Debug.WriteLine("Succeeded in " + stopwatch.Elapsed);
+                                return true;
+                            }
+                }
+            }
 
             stopwatch.Stop();
-            videoTitle = null;
+            Debug.WriteLine("Failed in " + stopwatch.Elapsed);
             return false;
         }
 
