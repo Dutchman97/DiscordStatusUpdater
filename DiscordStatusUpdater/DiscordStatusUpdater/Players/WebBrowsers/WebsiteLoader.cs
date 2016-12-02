@@ -19,14 +19,14 @@ namespace DiscordStatusUpdater.Players
         {
             string name = item.Attributes["name"].Value;
 
-            string baseUrl = item["url"].InnerText;
+            Regex urlRegex = new Regex(item["urlregex"].InnerText);
 
             Regex regex = new Regex(item["regex"].InnerText);
 
             int animeIdx = int.Parse(item["animeidx"].InnerText);
             int episodeIdx = int.Parse(item["episodeidx"].InnerText);
 
-            return new WebsiteTitleParser(name, baseUrl, regex, animeIdx, episodeIdx);
+            return new WebsiteTitleParser(name, urlRegex, regex, animeIdx, episodeIdx);
         }
     }
 }

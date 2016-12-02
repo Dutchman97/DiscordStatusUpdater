@@ -7,12 +7,12 @@ namespace DiscordStatusUpdater.Players
 {
     public class WebsiteTitleParser : TitleParser
     {
-        string baseUrl;
+        Regex urlRegex;
         int animeIdx, episodeIdx;
 
-        public WebsiteTitleParser(string name, string baseUrl, Regex regex, int animeIdx, int episodeIdx)
+        public WebsiteTitleParser(string name, Regex urlRegex, Regex regex, int animeIdx, int episodeIdx)
         {
-            this.baseUrl = baseUrl;
+            this.urlRegex = urlRegex;
             this.regex = regex;
             this.animeIdx = animeIdx;
             this.episodeIdx = episodeIdx;
@@ -21,7 +21,7 @@ namespace DiscordStatusUpdater.Players
 
         public bool IsWebsiteUrl(Uri uri)
         {
-            return uri.Host.Contains(baseUrl);
+            return urlRegex.IsMatch(uri.AbsoluteUri);
         }
 
         public override bool TryParse(string fullTitle, out string result)
@@ -48,7 +48,7 @@ namespace DiscordStatusUpdater.Players
 
         public override string ToString()
         {
-            return string.Format("{0} - {1}", Name, baseUrl);
+            return Name;
         }
     }
 }
