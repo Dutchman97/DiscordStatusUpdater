@@ -10,6 +10,7 @@ namespace DiscordStatusUpdater
     {
         public event EventHandler<StatusSetAttemptedEventArgs> StatusSetAttempted;
 
+        const int UPDATE_INTERVAL = 11000;
         DiscordClient client;
         Timer timer;
         string curStatus = string.Empty;
@@ -71,7 +72,7 @@ namespace DiscordStatusUpdater
                     curStatus = newStatus;
                     newStatus = null;
 
-                    timer.Interval = 10000;
+                    timer.Interval = UPDATE_INTERVAL;
                     timer.Start();
                 }
                 else

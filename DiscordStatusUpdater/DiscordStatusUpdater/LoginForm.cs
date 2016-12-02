@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 using System.Xml;
 using Discord;
@@ -53,21 +53,6 @@ namespace DiscordStatusUpdater
                     Properties.Settings.Default.Password = textBox2.Text;
                     Properties.Settings.Default.Remember = checkBox1.Checked;
                     Properties.Settings.Default.Save();
-
-                    /*
-                    // The best way to wait of course
-                    DateTime start = DateTime.Now;
-                    while (client.State != ConnectionState.Connected)
-                    {
-                        System.Threading.Thread.Sleep(10);
-
-                        var delta = DateTime.Now - start;
-                        if (delta >= TimeSpan.FromSeconds(TIMEOUT))
-                            throw new TimeoutException("Login timed out. Either the email/password provided is incorrect or the program can not connect to Discord.");
-                        else if (delta < TimeSpan.Zero)
-                            throw new Exception("The time on this computer was changed.");
-                    }
-                    */
 
                     MainForm main = new MainForm(client);
                     main.Owner = this;

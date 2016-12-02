@@ -12,8 +12,8 @@ namespace DiscordStatusUpdater
         SettingsForm settingsForm;
         DiscordClient client;
         bool manual = false;
-        const int CHECKINTERVAL = 10000;
-        const string PLAYINGTEXT = "Playing";
+        const int CHECK_INTERVAL = 10000;
+        const string PLAYING_TEXT = "Playing";
 
         StatusUpdater statusUpdater;
         Players.PlayerManager playerManager;
@@ -86,7 +86,7 @@ namespace DiscordStatusUpdater
         private void checkTimer_Tick(object sender, EventArgs e)
         {
             ChangeStatus();
-            checkTimer.Interval = CHECKINTERVAL;
+            checkTimer.Interval = CHECK_INTERVAL;
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -130,7 +130,14 @@ namespace DiscordStatusUpdater
             if (e.CurrentStatus == string.Empty)
                 statusTextBox.Text = string.Empty;
             else
-                statusTextBox.Rtf = @"{\rtf1\ansi {\colortbl;\red0\green0\blue0;}\cf1  " + PLAYINGTEXT + @" \b\cf0 " + e.CurrentStatus + @"\b0 }";
+            {
+                string rtf = @"{\rtf1\ansi{\colortbl;\red0\green0\blue0;}\cf1  " + PLAYING_TEXT + @" \b\cf0 " + e.CurrentStatus + @"\b0 }";
+                if (statusTextBox.Text != " " + PLAYING_TEXT + " " + e.CurrentStatus)
+                {
+                    statusTextBox.Rtf = rtf;
+                    toolTip1.SetToolTip(statusTextBox, statusTextBox.Text.Substring(1));
+                }
+            }
 
             if (e.Timer.Enabled)
             {

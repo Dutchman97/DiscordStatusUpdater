@@ -116,7 +116,6 @@
             // 
             // statusTextBox
             // 
-            this.statusTextBox.Enabled = false;
             this.statusTextBox.Location = new System.Drawing.Point(12, 29);
             this.statusTextBox.Multiline = false;
             this.statusTextBox.Name = "statusTextBox";
@@ -145,6 +144,7 @@
             // 
             // settingsButton
             // 
+            this.settingsButton.Enabled = false;
             this.settingsButton.Location = new System.Drawing.Point(188, 84);
             this.settingsButton.Name = "settingsButton";
             this.settingsButton.Size = new System.Drawing.Size(82, 48);
@@ -156,7 +156,7 @@
             // toolTip1
             // 
             this.toolTip1.AutoPopDelay = 15000;
-            this.toolTip1.InitialDelay = 500;
+            this.toolTip1.InitialDelay = 100;
             this.toolTip1.ReshowDelay = 100;
             // 
             // MainForm

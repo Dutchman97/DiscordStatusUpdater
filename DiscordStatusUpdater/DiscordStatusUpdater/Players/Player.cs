@@ -16,7 +16,6 @@ namespace DiscordStatusUpdater.Players
         }
 
         public abstract bool TryGetVideoTitle(Process process, out string videoTitle);
-        //public abstract bool IsVideoPlaying(Process process);
 
         public string[] ProcessNames { get; protected set; }
         public string PlayerName { get; protected set; }
