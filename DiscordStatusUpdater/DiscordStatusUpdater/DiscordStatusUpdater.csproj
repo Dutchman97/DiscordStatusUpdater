@@ -121,6 +121,7 @@
     <Compile Include="Players\WebBrowsers\WebBrowserLoader.cs" />
     <Compile Include="Players\WebBrowsers\WebsiteLoader.cs" />
     <Compile Include="Players\WebBrowsers\WebsiteTitleParser.cs" />
+    <Compile Include="Players\WebBrowsers\Window.cs" />
     <Compile Include="Players\XmlLoader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

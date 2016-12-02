@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Windows.Automation;
 
 namespace DiscordStatusUpdater.Players
 {
@@ -16,28 +19,113 @@ namespace DiscordStatusUpdater.Players
             this.titleSuffix = titleSuffix;
         }
 
-        protected abstract bool TryGetUrl(Process process, out Uri uri);
+        #region GetWindows()-related code
+        protected virtual Window[] GetWindows(Process process)
+        {
+            List<Window> windowList = new List<Window>();
+
+            // The process must have a window 
+            if (process.MainWindowHandle == IntPtr.Zero)
+                return new Window[0];
+
+            var windowHandles = GetWindows((uint)process.Id);
+            foreach (var windowHandle in windowHandles)
+            {
+                Debug.WriteLine("=====");
+
+                AutomationElement root = AutomationElement.FromHandle(windowHandle);
+                var descendants = root.FindAll(TreeScope.Descendants, Condition.TrueCondition);
+                for (int i = 0; i < descendants.Count; i++)
+                {
+                    string propertyValue = (string)descendants[i].GetCurrentPropertyValue(ValuePatternIdentifiers.ValueProperty);
+                    if (string.IsNullOrWhiteSpace(propertyValue))
+                        continue;
+                    Debug.WriteLine(propertyValue);
+
+                    Uri uri;
+                    if (!Uri.TryCreate("http://" + propertyValue, UriKind.Absolute, out uri))
+                        continue;
+
+                    Window window = new Window() { Pointer = windowHandle, Process = process, Title = GetWindowTextRaw(windowHandle), Uri = uri };
+                    Debug.WriteLine(window);
+                    windowList.Add(window);
+                    break;
+                }
+            }
+
+            return windowList.ToArray();
+        }
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
+
+        public delegate bool EnumWindowsProc(IntPtr hwnd, int lParam);
+
+        static List<IntPtr> GetWindows(uint pid)
+        {
+            List<IntPtr> result = new List<IntPtr>();
+
+            EnumWindows(new EnumWindowsProc((hwnd, lParam) =>
+            {
+                uint windowPid;
+                GetWindowThreadProcessId(hwnd, out windowPid);
+
+                if (windowPid == pid)
+                    result.Add(hwnd);
+
+                return true;
+            }), IntPtr.Zero);
+
+            return result;
+        }
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, [Out] StringBuilder lParam);
+
+        public static string GetWindowTextRaw(IntPtr hwnd)
+        {
+            // Allocate correct string length first
+
+            int length = (int)SendMessage(hwnd, 0x000E, IntPtr.Zero, null);
+            StringBuilder sb = new StringBuilder(length + 1);
+            SendMessage(hwnd, 0x000D, (IntPtr)sb.Capacity, sb);
+            return sb.ToString();
+        }
+        #endregion
 
         public override bool TryGetVideoTitle(Process process, out string videoTitle)
         {
-            // Try to remove the prefix...
-            string windowTitle = process.MainWindowTitle;
-            if (titlePrefix != string.Empty && windowTitle.StartsWith(titlePrefix))
-                windowTitle = windowTitle.Substring(titlePrefix.Length);
-
-            // ...and the suffix from the window title
-            if (titleSuffix != string.Empty && windowTitle.EndsWith(titleSuffix))
-                windowTitle = windowTitle.Remove(windowTitle.Length - titleSuffix.Length);
-
-            Uri uri;
-            if (TryGetUrl(process, out uri))
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            foreach (Window window in GetWindows(process))
                 foreach (WebsiteTitleParser website in websites)
-                    if (website.IsWebsiteUrl(uri))
-                        if (website.TryParse(windowTitle, out videoTitle))
+                    if (website.IsWebsiteUrl(window.Uri))
+                        if (website.TryParse(RemovePrefixAndSuffix(window.Title), out videoTitle))
+                        {
+                            stopwatch.Stop();
+                            Debug.WriteLine(stopwatch.Elapsed);
                             return true;
+                        }
 
+            stopwatch.Stop();
             videoTitle = null;
             return false;
+        }
+
+        string RemovePrefixAndSuffix(string windowTitle)
+        {
+            string result = windowTitle;
+
+            if (titlePrefix != string.Empty && windowTitle.StartsWith(titlePrefix))
+                result = result.Substring(titlePrefix.Length);
+            
+            if (titleSuffix != string.Empty && windowTitle.EndsWith(titleSuffix))
+                result = result.Remove(windowTitle.Length - titleSuffix.Length);
+
+            return result;
         }
     }
 }

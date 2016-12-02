@@ -14,6 +14,15 @@ namespace DiscordStatusUpdater.Players
 
         }
 
+        protected override Window[] GetWindows(Process process)
+        {
+            if (!process.MainWindowTitle.Contains("Microsoft Edge"))
+                return new Window[0];
+
+            return base.GetWindows(process);
+        }
+
+        /*
         protected override bool TryGetUrl(Process process, out Uri uri)
         {
             uri = null;
@@ -40,5 +49,6 @@ namespace DiscordStatusUpdater.Players
 
             return false;
         }
+        */
     }
 }
