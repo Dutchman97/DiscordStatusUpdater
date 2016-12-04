@@ -69,12 +69,6 @@ namespace DiscordStatusUpdater.Players
             if (process.MainWindowHandle == IntPtr.Zero)
                 return false;
 
-            // If the process is a windows app, check if the app is really the web browser
-            // by looking if the (main) window title starts with the title prefix and ends with the title suffix
-            if (process.ProcessName == "ApplicationFrameHost")
-                if (!process.MainWindowTitle.StartsWith(titlePrefix) || !process.MainWindowTitle.EndsWith(titleSuffix))
-                    return false;
-
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             // For each window of the specified process...
@@ -85,6 +79,12 @@ namespace DiscordStatusUpdater.Players
 
                 if (string.IsNullOrWhiteSpace(windowTitle))
                     continue;
+
+                // If the web browser is a Windows app, check if the app is really the web browser
+                // by looking if the window title starts with the title prefix and ends with the title suffix
+                if (process.ProcessName == "ApplicationFrameHost")
+                    if (!windowTitle.StartsWith(titlePrefix) || !windowTitle.EndsWith(titleSuffix))
+                        continue;
 
                 windowTitle = RemovePrefixAndSuffix(windowTitle);
 
