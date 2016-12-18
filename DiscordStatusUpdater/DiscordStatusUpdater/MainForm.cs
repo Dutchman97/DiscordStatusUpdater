@@ -198,6 +198,11 @@ namespace DiscordStatusUpdater
         {
             if (e.KeyCode == Keys.Enter)
             {
+                if (setStatusTextBox.Text == "HERE BE DRAGONS")
+                {
+                    new DebugForm().Show();
+                    return;
+                }
                 if (!manual)
                     ChangeMode();
                 ChangeStatus(setStatusTextBox.Text);
