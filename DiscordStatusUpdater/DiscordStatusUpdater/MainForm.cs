@@ -9,7 +9,6 @@ namespace DiscordStatusUpdater
 {
     public partial class MainForm : Form
     {
-        SettingsForm settingsForm;
         DiscordClient client;
         bool manual = false;
         const int CHECK_INTERVAL = 15000;
@@ -164,29 +163,8 @@ namespace DiscordStatusUpdater
             SetHelpLabel();
         }
 
-        private void settingsButton_Click(object sender, EventArgs e)
-        {
-            if (settingsForm == null)
-            {
-                settingsForm = new SettingsForm();
-                settingsForm.StartPosition = FormStartPosition.Manual;
-            }
-
-            if (settingsForm.Visible)
-            {
-                settingsForm.Hide();
-            }
-            else
-            {
-                MainForm_Move(sender, e);
-                settingsForm.Show(this);
-            }
-        }
-
         private void MainForm_Move(object sender, EventArgs e)
         {
-            if (settingsForm != null)
-                settingsForm.Location = new Point(this.DesktopLocation.X + this.Width - 15, this.DesktopLocation.Y);
         }
 
         private void setStatusButton_Click(object sender, EventArgs e)

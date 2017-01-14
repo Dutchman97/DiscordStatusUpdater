@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Security.Cryptography;
+using System.IO;
+using System.Text;
 using System.Windows.Forms;
-using System.Xml;
+using System.Diagnostics;
 using Discord;
 
 namespace DiscordStatusUpdater
@@ -12,14 +14,101 @@ namespace DiscordStatusUpdater
         const int TIMEOUT = 10;
         const int PLAYER_MAJOR_VERSION = 1, PLAYER_MINOR_VERSION = 1;
         const int WEBSITE_MAJOR_VERSION = 1, WEBSITE_MINOR_VERSION = 0;
+        const string SETTINGS_FILE_PATH = "settings";
 
         public LoginForm()
         {
             InitializeComponent();
-            textBox1.Text = Properties.Settings.Default.Email;
-            textBox2.Text = Properties.Settings.Default.Password;
-            checkBox1.Checked = Properties.Settings.Default.Remember;
-            Properties.Settings.Default.Save();
+
+            var loginInfo = LoadLogin();
+            if (loginInfo != null)
+            {
+                textBox1.Text = loginInfo.Item1;
+                textBox2.Text = loginInfo.Item2;
+                checkBox1.Checked = loginInfo.Item3;
+            }
+        }
+
+        void SaveLogin(string email, string password, bool remember)
+        {
+            byte[] emailBytes = Encoding.UTF8.GetBytes(email);
+            byte[] passBytes;
+            byte rememberByte = remember == true ? (byte)1 : (byte)0;
+
+            using (Aes aes = Aes.Create())
+            {
+                SetAesIVAndKey(aes, emailBytes);
+                
+                ICryptoTransform encryptor = aes.CreateEncryptor();
+                using (MemoryStream msEncrypt = new MemoryStream())
+                {
+                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
+                            swEncrypt.Write(password);
+                        passBytes = msEncrypt.ToArray();
+                    }
+                }
+            }
+
+            byte[] output = new byte[emailBytes.Length + passBytes.Length + 2];
+            Array.Copy(emailBytes, 0, output, 0, emailBytes.Length);
+            Array.Copy(passBytes, 0, output, emailBytes.Length, passBytes.Length);
+            output[emailBytes.Length + passBytes.Length] = rememberByte;
+            output[emailBytes.Length + passBytes.Length + 1] = (byte)emailBytes.Length;
+            
+            File.WriteAllBytes(SETTINGS_FILE_PATH, output);
+        }
+
+        Tuple<string, string, bool> LoadLogin()
+        {
+            if (!File.Exists(SETTINGS_FILE_PATH))
+                return null;
+
+            byte[] input = File.ReadAllBytes(SETTINGS_FILE_PATH);
+            byte[] emailBytes = new byte[input[input.Length - 1]];
+            byte[] passEncBytes = new byte[input.Length - emailBytes.Length - 2];
+
+            Array.Copy(input, 0, emailBytes, 0, emailBytes.Length);
+            Array.Copy(input, emailBytes.Length, passEncBytes, 0, passEncBytes.Length);
+
+            string email = Encoding.UTF8.GetString(emailBytes);
+            string password;
+            bool remember = input[input.Length - 2] == 1;
+
+            using (Aes aes = Aes.Create())
+            {
+                SetAesIVAndKey(aes, emailBytes);
+
+                ICryptoTransform decryptor = aes.CreateDecryptor();
+                using (MemoryStream msDecrypt = new MemoryStream(passEncBytes))
+                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                            password = srDecrypt.ReadToEnd();
+            }
+
+            return new Tuple<string, string, bool>(email, password, remember);
+        }
+
+        void SetAesIVAndKey(Aes aes, byte[] emailBytes)
+        {
+            // Using the plaintext email as encryption key is stupid,
+            // but it's better than storing the password as plaintext
+            byte[] key = new byte[aes.KeySize / 8];
+            byte[] keyTemp = emailBytes;
+            while (keyTemp.Length < key.Length)
+            {
+                byte[] keyTemp1 = new byte[keyTemp.Length * 2];
+                Array.Copy(keyTemp, 0, keyTemp1, 0, keyTemp.Length);
+                Array.Copy(keyTemp, 0, keyTemp1, keyTemp.Length, keyTemp.Length);
+                keyTemp = keyTemp1;
+            }
+            Array.Copy(keyTemp, 0, key, 0, key.Length);
+            aes.Key = key;
+
+            byte[] iv = new byte[aes.BlockSize / 8];
+            Array.Copy(keyTemp, keyTemp.Length - iv.Length, iv, 0, iv.Length);
+            aes.IV = iv;
         }
 
         bool button1Clicked = false;
@@ -49,10 +138,8 @@ namespace DiscordStatusUpdater
                         textBox1.Text = "";
                         textBox2.Text = "";
                     }
-                    Properties.Settings.Default.Email = textBox1.Text;
-                    Properties.Settings.Default.Password = textBox2.Text;
-                    Properties.Settings.Default.Remember = checkBox1.Checked;
-                    Properties.Settings.Default.Save();
+
+                    SaveLogin(textBox1.Text, textBox2.Text, checkBox1.Checked);
 
                     MainForm main = new MainForm(client);
                     main.Owner = this;

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Automation;
 using System.Windows.Forms;
 
@@ -25,8 +27,19 @@ namespace DiscordStatusUpdater
 
         string Do(string input)
         {
-            string output = "File: " + input + ".exe" + Environment.NewLine;
-            Process[] processes = Process.GetProcessesByName(input);
+            //string output = "File: " + input + ".exe" + Environment.NewLine;
+            string output = string.Empty;
+
+            Process[] processes;
+            if (input.Contains("*"))
+            {
+                processes = Process.GetProcesses();
+                processes = processes.Where((process) => { return Regex.IsMatch(process.ProcessName.ToLower(), "^" + input.ToLower().Replace("*", ".*") + "$"); }).ToArray();
+            }
+            else
+                processes = Process.GetProcessesByName(input);
+
+            output += "Found " + processes.Length + " processes matching \"" + input + "\"." + Environment.NewLine + Environment.NewLine;
 
             foreach (Process process in processes)
             {
@@ -34,7 +47,7 @@ namespace DiscordStatusUpdater
                 if (windowHandles.Count == 0)
                     continue;
 
-                output += "Process " + process.Id + ":" + Environment.NewLine;
+                output += process.ProcessName + " (" + process.Id + "):" + Environment.NewLine;
                 output += "Found " + windowHandles.Count + " windows belonging to this process." + Environment.NewLine;
 
                 foreach (var windowHandle in windowHandles)
