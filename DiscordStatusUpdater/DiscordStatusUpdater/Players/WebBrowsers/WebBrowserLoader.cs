@@ -7,11 +7,10 @@ namespace DiscordStatusUpdater.Players
     public class WebBrowserLoader : XmlLoader<Player>
     {
         const int MAJOR_VERSION = 1, MINOR_VERSION = 0;
-        const string FILE_PATH = "", FILE_NAME = "WebBrowsers.xml", ITEM_NAME = "webbrowser";
 
         List<WebsiteTitleParser> websites;
 
-        public WebBrowserLoader() : base(FILE_PATH, FILE_NAME, MAJOR_VERSION, MINOR_VERSION, ITEM_NAME)
+        public WebBrowserLoader() : base("cache/", "WebBrowsers.xml", MAJOR_VERSION, MINOR_VERSION, "webbrowser")
         {
             websites = new List<WebsiteTitleParser>();
             new WebsiteLoader().LoadItems(websites);

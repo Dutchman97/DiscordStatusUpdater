@@ -22,6 +22,9 @@ namespace DiscordStatusUpdater
             InitializeComponent();
             this.client = client;
 
+            Debug.WriteLine(XmlDownloader.DownloadFiles() ? "Succesfully downloaded xml files" : "Failed to download xml files");
+            playerManager = new Players.PlayerManager();
+
             checkTimer.Interval = 1;
             checkTimer.Start();
             updateTimerLabel.Text = "Status update possible";
@@ -32,8 +35,6 @@ namespace DiscordStatusUpdater
 
             statusUpdater = new StatusUpdater(updateTimer, client);
             statusUpdater.StatusSetAttempted += StatusSetAttempted;
-
-            playerManager = new Players.PlayerManager();
         }
 
         private string GetVideoTitle()
@@ -185,6 +186,17 @@ namespace DiscordStatusUpdater
                     ChangeMode();
                 ChangeStatus(setStatusTextBox.Text);
             }
+        }
+
+        private void logOutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void updateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Debug.WriteLine(XmlDownloader.DownloadFiles() ? "Succesfully downloaded xml files" : "Failed to download xml files");
+            playerManager.Reload();
         }
     }
 }

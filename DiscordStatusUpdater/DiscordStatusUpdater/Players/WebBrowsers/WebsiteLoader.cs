@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace DiscordStatusUpdater.Players
@@ -8,9 +6,8 @@ namespace DiscordStatusUpdater.Players
     public class WebsiteLoader : XmlLoader<WebsiteTitleParser>
     {
         const int MAJOR_VERSION = 1, MINOR_VERSION = 0;
-        const string FILE_PATH = "", FILE_NAME = "Websites.xml";
 
-        public WebsiteLoader() : base(FILE_PATH, FILE_NAME, MAJOR_VERSION, MINOR_VERSION, "website")
+        public WebsiteLoader() : base("cache/", "Websites.xml", MAJOR_VERSION, MINOR_VERSION, "website")
         {
 
         }

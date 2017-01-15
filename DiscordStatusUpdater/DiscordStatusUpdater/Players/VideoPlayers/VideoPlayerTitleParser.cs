@@ -13,7 +13,7 @@ namespace DiscordStatusUpdater.Players
         public VideoPlayerTitleParser(string prefix, string suffix)
         {
             // Regex to capture player prefix and suffix, and file extension, and video file name
-            regex = new Regex(@"^(" + prefix + @")(.+)(\.\w{1,4})?(" + suffix + ")$");
+            regex = new Regex(@"^(" + prefix + @")(.+?)(\.\w{1,4})?(" + suffix + ")$");
             groupIdx = 2;
         }
 
@@ -38,13 +38,13 @@ namespace DiscordStatusUpdater.Players
             string bracketsRemoved = Regex.Replace(videoName, @"\[.+?\]", "");
             if (bracketsRemoved == string.Empty)
                 // For certain (sub)groups that put everything in square brackets *cough* philosophy-raws *cough*
-                videoName = bracketsRemoved;
+                bracketsRemoved = videoName;
             else if (bracketsRemoved == videoName)
                 // For certain (sub)groups that use round brackets instead of square brackets *cough* Grey_Phantom *cough*
-                videoName = Regex.Replace(videoName, @"\(.+?\)", "");
+                bracketsRemoved = Regex.Replace(videoName, @"\(.+?\)", "");
 
             // Replace multiple whitespace characters after each other with a single whitespace character
-            videoName = Regex.Replace(videoName, @"\s+", " ");
+            videoName = Regex.Replace(bracketsRemoved, @"\s+", " ");
 
             // Remove all leading and trailing whitespace
             videoName = videoName.Trim();

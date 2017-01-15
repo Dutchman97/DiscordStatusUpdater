@@ -21,7 +21,7 @@ namespace DiscordStatusUpdater
             InitializeComponent();
 
             var loginInfo = LoadLogin();
-            if (loginInfo != null)
+            if (loginInfo != null && loginInfo.Item3)
             {
                 textBox1.Text = loginInfo.Item1;
                 textBox2.Text = loginInfo.Item2;
@@ -51,6 +51,7 @@ namespace DiscordStatusUpdater
                 }
             }
 
+            // Put the plaintext email first, then the encypted password, then the remember bool, finally the length of the email.
             byte[] output = new byte[emailBytes.Length + passBytes.Length + 2];
             Array.Copy(emailBytes, 0, output, 0, emailBytes.Length);
             Array.Copy(passBytes, 0, output, emailBytes.Length, passBytes.Length);
@@ -137,9 +138,10 @@ namespace DiscordStatusUpdater
                     {
                         textBox1.Text = "";
                         textBox2.Text = "";
+                        SaveLogin("abc@def.com", "abcdef", checkBox1.Checked);
                     }
-
-                    SaveLogin(textBox1.Text, textBox2.Text, checkBox1.Checked);
+                    else
+                        SaveLogin(textBox1.Text, textBox2.Text, checkBox1.Checked);
 
                     MainForm main = new MainForm(client);
                     main.Owner = this;
