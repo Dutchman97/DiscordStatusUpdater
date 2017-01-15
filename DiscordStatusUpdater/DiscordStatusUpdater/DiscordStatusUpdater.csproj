@@ -181,18 +181,15 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="WebBrowsers.xml">
+    <None Include="WebBrowsers.xml">
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Players.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Players.xml">
       <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Websites.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Websites.xml">
       <SubType>Designer</SubType>
-    </Content>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

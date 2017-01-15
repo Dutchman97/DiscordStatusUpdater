@@ -13,6 +13,7 @@ namespace DiscordStatusUpdater
         bool manual = false;
         const int CHECK_INTERVAL = 15000;
         const string PLAYING_TEXT = "Playing";
+        bool logout = false;
 
         StatusUpdater statusUpdater;
         Players.PlayerManager playerManager;
@@ -25,7 +26,7 @@ namespace DiscordStatusUpdater
             Debug.WriteLine(XmlDownloader.DownloadFiles() ? "Succesfully downloaded xml files" : "Failed to download xml files");
             playerManager = new Players.PlayerManager();
 
-            checkTimer.Interval = 1;
+            checkTimer.Interval = CHECK_INTERVAL;
             checkTimer.Start();
             updateTimerLabel.Text = "Status update possible";
             updateTimerLabel.ForeColor = System.Drawing.Color.Green;
@@ -91,6 +92,9 @@ namespace DiscordStatusUpdater
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (client.State == ConnectionState.Disconnected)
+                return;
+
             if (!statusUpdater.StatusUpdatePossible)
             {
                 // StatusUpdater has to be removed, because if it's still active it will
@@ -110,19 +114,27 @@ namespace DiscordStatusUpdater
                     return;
                 }
             }
-            
+
+            Debug.WriteLine("Closing...");
             this.Text = "Closing...";
             client.SetGame(null);
 
             // Yes, a Thread.Sleep() since appearantly calling client.SetGame() does not wait for the new status to get sent.
             Thread.Sleep(300);
-            client.Disconnect();
+            client.Disconnect().Wait();
+            client.Dispose();
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Debug.WriteLine("Finishing closing...");
-            Application.Exit();
+            if (this.logout)
+            {
+                this.Owner.Show();
+                ((LoginForm)this.Owner).Logout();
+            }
+            else
+                Application.Exit();
         }
 
         private void StatusSetAttempted(object sender, StatusUpdater.StatusSetAttemptedEventArgs e)
@@ -190,7 +202,8 @@ namespace DiscordStatusUpdater
 
         private void logOutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            this.logout = true;
+            this.Close();
         }
 
         private void updateToolStripMenuItem_Click(object sender, EventArgs e)

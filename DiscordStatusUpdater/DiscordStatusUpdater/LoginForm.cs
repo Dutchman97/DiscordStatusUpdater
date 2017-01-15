@@ -144,9 +144,8 @@ namespace DiscordStatusUpdater
                         SaveLogin(textBox1.Text, textBox2.Text, checkBox1.Checked);
 
                     MainForm main = new MainForm(client);
-                    main.Owner = this;
-                    main.Show();
                     this.Hide();
+                    main.Show(this);
                 }
                 else
                 {
@@ -155,18 +154,31 @@ namespace DiscordStatusUpdater
             }
             catch (Exception ex)
             {
-                textBox1.Enabled = true;
-                textBox2.Enabled = true;
-                this.Text = "DiscordStatusUpdater";
                 MessageBox.Show(ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace, "Failed to login", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 Console.WriteLine(ex.ToString() + Environment.NewLine + ex.StackTrace);
-                client.Dispose();
             }
+
+            textBox1.Enabled = true;
+            textBox2.Enabled = true;
+            this.Text = "DiscordStatusUpdater";
+
+            // Note: Currently this bit of code will only be executed if the user logs out,
+            //       since if the users closes MainForm, the whole application closes
 
             lock (o)
             {
                 button1Clicked = false;
             }
+        }
+
+        public void Logout()
+        {
+            textBox1.Text = string.Empty;
+            textBox2.Text = string.Empty;
+            checkBox1.Checked = false;
+
+            if (File.Exists(SETTINGS_FILE_PATH))
+                File.Delete(SETTINGS_FILE_PATH);
         }
 
         private void textBox_KeyDown(object sender, KeyEventArgs e)
