@@ -108,6 +108,7 @@ namespace DiscordStatusUpdater
                 if (result == DialogResult.No)
                 {
                     e.Cancel = true;
+                    logout = false;
 
                     statusUpdater = new StatusUpdater(updateTimer, client);
                     statusUpdater.StatusSetAttempted += StatusSetAttempted;
@@ -117,6 +118,9 @@ namespace DiscordStatusUpdater
 
             Debug.WriteLine("Closing...");
             this.Text = "Closing...";
+
+            statusUpdater.Dispose();
+            statusUpdater = null;
             client.SetGame(null);
 
             // Yes, a Thread.Sleep() since appearantly calling client.SetGame() does not wait for the new status to get sent.

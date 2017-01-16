@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Security.Cryptography;
 using System.IO;
 using System.Text;
@@ -152,18 +153,19 @@ namespace DiscordStatusUpdater
                     throw new Exception("Login failed.");
                 }
             }
+            catch (Discord.Net.HttpException)
+            {
+                MessageBox.Show("Could not connect to Discord.", "Failed to login", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+            }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace, "Failed to login", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                Console.WriteLine(ex.ToString() + Environment.NewLine + ex.StackTrace);
+                MessageBox.Show(ex.Message + Environment.NewLine + Environment.NewLine + "Source: " + ex.Source, "Failed to login", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                Console.WriteLine(ex.ToString());
             }
 
             textBox1.Enabled = true;
             textBox2.Enabled = true;
             this.Text = "DiscordStatusUpdater";
-
-            // Note: Currently this bit of code will only be executed if the user logs out,
-            //       since if the users closes MainForm, the whole application closes
 
             lock (o)
             {

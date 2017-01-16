@@ -93,7 +93,16 @@ namespace DiscordStatusUpdater.Players
                 var descendants = root.FindAll(TreeScope.Descendants, new NotCondition(new PropertyCondition(ValuePatternIdentifiers.ValueProperty, string.Empty)));
                 for (int i = 0; i < descendants.Count; i++)
                 {
-                    string propertyValue = (string)descendants[i].GetCurrentPropertyValue(ValuePatternIdentifiers.ValueProperty);
+                    string propertyValue;
+                    try
+                    {
+                        propertyValue = (string)descendants[i].GetCurrentPropertyValue(ValuePatternIdentifiers.ValueProperty);
+                    }
+                    catch (ElementNotAvailableException)
+                    {
+                        break;
+                    }
+
                     if (string.IsNullOrWhiteSpace(propertyValue))
                         continue;
 
