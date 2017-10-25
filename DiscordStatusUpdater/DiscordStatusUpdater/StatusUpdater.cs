@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
 using Discord;
+using Discord.WebSocket;
 
 namespace DiscordStatusUpdater
 {
@@ -11,12 +12,12 @@ namespace DiscordStatusUpdater
         public event EventHandler<StatusSetAttemptedEventArgs> StatusSetAttempted;
 
         const int UPDATE_INTERVAL = 11000;
-        DiscordClient client;
+        DiscordSocketClient client;
         Timer timer;
         string curStatus = string.Empty;
         string newStatus = null;
 
-        public StatusUpdater(Timer timer, DiscordClient client)
+        public StatusUpdater(Timer timer, DiscordSocketClient client)
         {
             Debug.WriteLine("Loading StatusUpdater");
 
@@ -68,7 +69,7 @@ namespace DiscordStatusUpdater
                 if (!timer.Enabled)
                 {
                     Debug.WriteLine("Timer is disabled, setting status to " + newStatus);
-                    client.SetGame(newStatus == string.Empty ? null : newStatus);
+                    client.SetGameAsync(newStatus == string.Empty ? null : newStatus).Wait();
                     curStatus = newStatus;
                     newStatus = null;
 

@@ -4,12 +4,13 @@ using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using Discord;
+using Discord.WebSocket;
 
 namespace DiscordStatusUpdater
 {
     public partial class MainForm : Form
     {
-        DiscordClient client;
+        DiscordSocketClient client;
         bool manual = false;
         const int CHECK_INTERVAL = 15000;
         const string PLAYING_TEXT = "Playing";
@@ -18,7 +19,7 @@ namespace DiscordStatusUpdater
         StatusUpdater statusUpdater;
         Players.PlayerManager playerManager;
 
-        public MainForm(DiscordClient client)
+        public MainForm(DiscordSocketClient client)
         {
             InitializeComponent();
             this.client = client;
@@ -31,7 +32,7 @@ namespace DiscordStatusUpdater
             updateTimerLabel.Text = "Status update possible";
             updateTimerLabel.ForeColor = System.Drawing.Color.Green;
             SetHelpLabel();
-            usernameLabel.Text = "Logged in as " + client.CurrentUser.Name;
+            usernameLabel.Text = "Logged in as " + client.CurrentUser.Username;
             Console.WriteLine(usernameLabel.Text);
 
             statusUpdater = new StatusUpdater(updateTimer, client);
@@ -92,7 +93,7 @@ namespace DiscordStatusUpdater
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (client.State == ConnectionState.Disconnected)
+            if (client.ConnectionState == ConnectionState.Disconnected)
                 return;
 
             if (!statusUpdater.StatusUpdatePossible)
@@ -121,11 +122,11 @@ namespace DiscordStatusUpdater
 
             statusUpdater.Dispose();
             statusUpdater = null;
-            client.SetGame(null);
+            client.SetGameAsync(null).Wait();
 
             // Yes, a Thread.Sleep() since appearantly calling client.SetGame() does not wait for the new status to get sent.
             Thread.Sleep(300);
-            client.Disconnect().Wait();
+            client.LogoutAsync().Wait();
             client.Dispose();
         }
 

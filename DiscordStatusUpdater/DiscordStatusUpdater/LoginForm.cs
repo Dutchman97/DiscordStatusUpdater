@@ -6,6 +6,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using Discord;
+using Discord.WebSocket;
+using System.Linq;
 
 namespace DiscordStatusUpdater
 {
@@ -123,26 +125,36 @@ namespace DiscordStatusUpdater
                 else button1Clicked = true;
             }
 
-            DiscordClient client = new DiscordClient();
-
             try
             {
-                textBox1.Enabled = false;
-                textBox2.Enabled = false;
+                //textBox1.Enabled = false;
+                //textBox2.Enabled = false;
                 this.Text = "Logging in...";
 
-                await client.Connect(textBox1.Text, textBox2.Text);
+                string clientId = "372387845333057538";
+                string state = this.RandomString(12);
+                this.webBrowser1.Navigate(new Uri("https://discordapp.com/api/oauth2/authorize?response_type=code&client_id=" + clientId + "&scope=identify&state=" + state + "&redirect_uri=http%3A%2F%2Flocalhost%3A5000"));
+                this.webBrowser1.Navigating += this.WbTest;
 
-                if (client.State == ConnectionState.Connected || client.State == ConnectionState.Connecting)
+                //await client.LoginAsync(TokenType.Bearer, token);//textBox1.Text, textBox2.Text);
+                lock (o) {
+                    button1Clicked = false;
+                }
+
+                return;
+
+                DiscordSocketClient client = new DiscordSocketClient();
+
+                if (client.ConnectionState == ConnectionState.Connected || client.ConnectionState == ConnectionState.Connecting)
                 {
-                    if (!checkBox1.Checked)
-                    {
-                        textBox1.Text = "";
-                        textBox2.Text = "";
-                        SaveLogin("abc@def.com", "abcdef", checkBox1.Checked);
-                    }
-                    else
-                        SaveLogin(textBox1.Text, textBox2.Text, checkBox1.Checked);
+                    //if (!checkBox1.Checked)
+                    //{
+                    //    textBox1.Text = "";
+                    //    textBox2.Text = "";
+                    //    SaveLogin("abc@def.com", "abcdef", checkBox1.Checked);
+                    //}
+                    //else
+                    //    SaveLogin(textBox1.Text, textBox2.Text, checkBox1.Checked);
 
                     MainForm main = new MainForm(client);
                     this.Hide();
@@ -170,6 +182,57 @@ namespace DiscordStatusUpdater
             lock (o)
             {
                 button1Clicked = false;
+            }
+        }
+
+        private string RandomString(int length) {
+            RNGCryptoServiceProvider random = new RNGCryptoServiceProvider();
+            byte[] bytes = new byte[length];
+            random.GetBytes(bytes);
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToLower();
+
+            string result = "";
+            for (int i = 0; i < length; i++) {
+                int charIndex = (int)((float)bytes[i] / 255.0f * (float)length);
+                result += chars[charIndex];
+            }
+            return result;
+        }
+        
+        private void WbTest(object sender, WebBrowserNavigatingEventArgs e) {
+            Uri url = e.Url;
+            string urlString = url.OriginalString;
+
+            Console.WriteLine("Uri: " + urlString);
+            Console.WriteLine("Host: " + url.Host);
+            if (url.Host != "localhost") {
+                return;
+            }
+
+            string token = url.Fragment;
+
+            Console.WriteLine("Fragment: " + token);
+            return;
+
+            DiscordSocketClient client = new DiscordSocketClient();
+            client.LoginAsync(TokenType.Bearer, token);
+
+            if (client.ConnectionState == ConnectionState.Connected || client.ConnectionState == ConnectionState.Connecting) {
+                //if (!checkBox1.Checked)
+                //{
+                //    textBox1.Text = "";
+                //    textBox2.Text = "";
+                //    SaveLogin("abc@def.com", "abcdef", checkBox1.Checked);
+                //}
+                //else
+                //    SaveLogin(textBox1.Text, textBox2.Text, checkBox1.Checked);
+
+                MainForm main = new MainForm(client);
+                this.Hide();
+                main.Show(this);
+            }
+            else {
+                throw new Exception("Login failed.");
             }
         }
 
