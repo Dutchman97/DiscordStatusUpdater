@@ -136,7 +136,6 @@ namespace DiscordStatusUpdater
             if (this.logout)
             {
                 this.Owner.Show();
-                ((LoginForm)this.Owner).Logout();
             }
             else
                 Application.Exit();
