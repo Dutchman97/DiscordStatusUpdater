@@ -238,6 +238,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="settings">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="WebBrowsers.xml">
       <SubType>Designer</SubType>
     </None>

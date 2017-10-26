@@ -50,7 +50,7 @@
             this.geckoWebBrowser1.FrameEventsPropagateToMainWindow = false;
             this.geckoWebBrowser1.Location = new System.Drawing.Point(0, 0);
             this.geckoWebBrowser1.Name = "geckoWebBrowser1";
-            this.geckoWebBrowser1.Size = new System.Drawing.Size(769, 448);
+            this.geckoWebBrowser1.Size = new System.Drawing.Size(468, 639);
             this.geckoWebBrowser1.TabIndex = 6;
             this.geckoWebBrowser1.UseHttpActivityObserver = false;
             // 
@@ -58,7 +58,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(769, 448);
+            this.ClientSize = new System.Drawing.Size(468, 639);
             this.Controls.Add(this.geckoWebBrowser1);
             this.Controls.Add(this.button1);
             this.Name = "LoginForm";
