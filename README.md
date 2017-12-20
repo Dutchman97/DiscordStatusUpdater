@@ -1,3 +1,7 @@
+# WARNING: Using any kind of self-bot is [a bannable offense](https://support.discordapp.com/hc/en-us/articles/115002192352-Automated-user-accounts-self-bots-) as of recent, you are heavily encouraged *not* to use this program anymore.
+
+---
+
 # DiscordStatusUpdater
 
 ## Usage:
